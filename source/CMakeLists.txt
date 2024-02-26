@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.14)
+
+add_subdirectory(view)
+add_subdirectory(business_logic)
+add_subdirectory(utils)
