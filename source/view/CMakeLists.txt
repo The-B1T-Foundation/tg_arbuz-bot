@@ -9,4 +9,5 @@ target_link_libraries(${PROJECT_NAME}
         TG_API
         POSTGRE_SQL
         TG_ARBUZ_BOT_BUSINESS_LOGIC
+        UTILS
 )

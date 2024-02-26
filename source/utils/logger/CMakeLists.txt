@@ -11,4 +11,4 @@ set(SOURCES
 )
 
 add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
-target_include_directories(${LIBRARY_NAME} PUBLIC ./)
+target_include_directories(${LIBRARY_NAME} PUBLIC .)
