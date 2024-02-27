@@ -3,9 +3,11 @@
 #include <logger_utility.hpp>
 #include <config_utility.hpp>
 #include <message_handler.hpp>
+#include <db_controller.hpp>
 
 int main()
 {
+#if 1
     auto cfg = AConfig_Utility::Load_Config();
 
     if (cfg == std::nullopt)
@@ -13,8 +15,13 @@ int main()
         ALogger_Utility::Error("Error reading config data");
         return -1;
     }
+#endif
 
     TgBot::Bot tg_bot(cfg->Get_TG_Token());
+    ADB_Controller db_controller(cfg.value());
+
+    // for test
+    ALogger_Utility::Message(std::to_string(db_controller.Is_User_Exists(5)));
 
     AMessage_Handler message_handler(tg_bot);
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
