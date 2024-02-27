@@ -10,4 +10,7 @@ target_link_libraries(${PROJECT_NAME}
         POSTGRE_SQL
         TG_ARBUZ_BOT_BUSINESS_LOGIC
         UTILS
+        MESSAGE_HANDLER
 )
+
+add_subdirectory(message_handler)

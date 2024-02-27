@@ -9,5 +9,5 @@ public:
     AConfig_Utility() = default;
     ~AConfig_Utility() = default;
 
-    std::optional<AConfig> Load_Config();
+    static std::optional<AConfig> Load_Config();
 };

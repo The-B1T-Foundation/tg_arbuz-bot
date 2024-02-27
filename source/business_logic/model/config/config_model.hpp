@@ -5,7 +5,7 @@
 class AConfig
 {
 public:
-    AConfig(std::string&& tg_token);
+    explicit AConfig(std::string&& tg_token);
     ~AConfig() = default;
 
     [[nodiscard]] const std::string& Get_TG_Token() const;

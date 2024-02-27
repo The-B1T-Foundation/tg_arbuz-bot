@@ -2,11 +2,11 @@
 
 #include <logger_utility.hpp>
 #include <config_utility.hpp>
+#include <message_handler.hpp>
 
 int main()
 {
-    AConfig_Utility config_utility;
-    auto cfg = config_utility.Load_Config();
+    auto cfg = AConfig_Utility::Load_Config();
 
     if (cfg == std::nullopt)
     {
@@ -16,10 +16,10 @@ int main()
 
     TgBot::Bot tg_bot(cfg->Get_TG_Token());
 
-    tg_bot.getEvents().onCommand("start", [&tg_bot](TgBot::Message::Ptr message) -> void
+    AMessage_Handler message_handler(tg_bot);
+    tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
-        tg_bot.getApi().sendMessage(message->chat->id, "Hi!");
-        tg_bot.getApi().sendMessage(message->chat->id, message->text);
+        message_handler.Handle_All_Messages(message);
     });
 
     try
