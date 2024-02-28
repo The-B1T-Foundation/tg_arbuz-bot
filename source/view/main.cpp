@@ -6,6 +6,7 @@
 
 int main()
 {
+#if 1
     auto cfg = AConfig_Utility::Load_Config();
 
     if (cfg == std::nullopt)
@@ -13,10 +14,12 @@ int main()
         ALogger_Utility::Error("Error reading config data");
         return -1;
     }
+#endif
 
     TgBot::Bot tg_bot(cfg->Get_TG_Token());
+    ADB_Controller db_controller(cfg.value());
 
-    AMessage_Handler message_handler(tg_bot);
+    AMessage_Handler message_handler(tg_bot, db_controller);
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
         message_handler.Handle_All_Messages(message);

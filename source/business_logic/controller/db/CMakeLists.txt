@@ -1,19 +1,16 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(LIBRARY_NAME MESSAGE_HANDLER)
+set(LIBRARY_NAME DB_CONTROLLER)
 
 set(HEADERS
-        message_handler.hpp
+        db_controller.hpp
 )
 
 set(SOURCES
-        message_handler.cpp
+        db_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
-target_link_libraries(${LIBRARY_NAME}
-        TG_API
-        TG_ARBUZ_BOT_BUSINESS_LOGIC
-)
+target_link_libraries(${LIBRARY_NAME} CONFIG_MODEL LOGGER_UTILITY POSTGRE_SQL USER_MODEL)
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)

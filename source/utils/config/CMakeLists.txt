@@ -15,4 +15,4 @@ target_link_libraries(${LIBRARY_NAME}
         CONFIG_MODEL
 )
 
-target_include_directories(${LIBRARY_NAME} PUBLIC .)
+target_include_directories(${LIBRARY_NAME} PUBLIC ./)

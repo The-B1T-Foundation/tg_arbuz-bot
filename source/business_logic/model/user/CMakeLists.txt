@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(LIBRARY_NAME LOGGER_UTILITY)
+set(LIBRARY_NAME USER_MODEL)
 
 set(HEADERS
-        logger_utility.hpp
+        user_model.hpp
 )
 
 set(SOURCES
-        logger_utility.cpp
+        user_model.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
