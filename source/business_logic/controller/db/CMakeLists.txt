@@ -11,6 +11,6 @@ set(SOURCES
 )
 
 add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
-target_link_libraries(${LIBRARY_NAME} CONFIG_MODEL LOGGER_UTILITY POSTGRE_SQL)
+target_link_libraries(${LIBRARY_NAME} CONFIG_MODEL LOGGER_UTILITY POSTGRE_SQL USER_MODEL)
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)

@@ -3,7 +3,6 @@
 #include <logger_utility.hpp>
 #include <config_utility.hpp>
 #include <message_handler.hpp>
-#include <db_controller.hpp>
 
 int main()
 {
@@ -20,10 +19,7 @@ int main()
     TgBot::Bot tg_bot(cfg->Get_TG_Token());
     ADB_Controller db_controller(cfg.value());
 
-    // for test
-    ALogger_Utility::Message(std::to_string(db_controller.Is_User_Exists(5)));
-
-    AMessage_Handler message_handler(tg_bot);
+    AMessage_Handler message_handler(tg_bot, db_controller);
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
         message_handler.Handle_All_Messages(message);
