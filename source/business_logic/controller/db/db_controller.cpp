@@ -1,6 +1,5 @@
 #include "db_controller.hpp"
 
-// "host=localhost port=5432 dbname=test user=postgres password=123456789"
 ADB_Controller::ADB_Controller(const AConfig& cfg)
 {
     Connection_String = "host=" + cfg.Get_PG_Host() + " port=" + cfg.Get_PG_Port() + " dbname=" + cfg.Get_PG_DB_Name() + " user=" + cfg.Get_PG_User() + " password=" + cfg.Get_PG_Password();
@@ -25,4 +24,20 @@ bool ADB_Controller::Is_User_Exists(std::int64_t user_id)
     }
 
     return false;
+}
+
+void ADB_Controller::Create_User(const AUser& user)
+{
+    try
+    {
+        pqxx::connection connection(Connection_String.c_str());
+        pqxx::work worker(connection);
+
+        worker.exec("INSERT INTO user_data (id, username, first_name) VALUES (" + worker.quote(user.Get_User_Id()) + ", " + worker.quote(user.Get_User_Username())+ ", " + worker.quote(user.Get_User_First_Name()) + ")");
+        worker.commit();
+    }
+    catch (const std::exception& ex)
+    {
+        ALogger_Utility::Error(ex.what());
+    }
 }
