@@ -8,31 +8,31 @@ std::optional<AConfig> AConfig_Utility::Load_Config()
         return std::nullopt;
     }
 
-    const char* pg_host = std::getenv("PG_HOST");
+    const char* pg_host = std::getenv("POSTGRES_HOST");
     if (!pg_host)
     {
         return std::nullopt;
     }
 
-    const char* pg_port = std::getenv("PG_PORT");
+    const char* pg_port = std::getenv("POSTGRES_PORT");
     if (!pg_port)
     {
         return std::nullopt;
     }
 
-    const char* pg_db_name = std::getenv("PG_DB_NAME");
+    const char* pg_db_name = std::getenv("POSTGRES_DB");
     if (!pg_db_name)
     {
         return std::nullopt;
     }
 
-    const char* pg_user = std::getenv("PG_USER");
+    const char* pg_user = std::getenv("POSTGRES_USER");
     if (!pg_user)
     {
         return std::nullopt;
     }
 
-    const char* pg_password = std::getenv("PG_PASSWORD");
+    const char* pg_password = std::getenv("POSTGRES_PASSWORD");
     if (!pg_password)
     {
         return std::nullopt;
