@@ -1,11 +1,13 @@
 #include "db_controller.hpp"
 
+// ---------------------------------------------------------------------------------------------------------------------
 ADB_Controller::ADB_Controller(const AConfig& cfg)
 {
     Connection_String = "host=" + cfg.Get_PG_Host() + " port=" + cfg.Get_PG_Port() + " dbname=" + cfg.Get_PG_DB_Name() + " user=" + cfg.Get_PG_User() + " password=" + cfg.Get_PG_Password();
     ALogger_Utility::Message("Connection string: " + Connection_String);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 bool ADB_Controller::Is_User_Exists(std::int64_t user_id)
 {
     try
@@ -26,6 +28,7 @@ bool ADB_Controller::Is_User_Exists(std::int64_t user_id)
     return false;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 void ADB_Controller::Create_User(const AUser& user)
 {
     try
@@ -34,6 +37,44 @@ void ADB_Controller::Create_User(const AUser& user)
         pqxx::work worker(connection);
 
         worker.exec("INSERT INTO user_data (id, username, first_name) VALUES (" + worker.quote(user.Get_User_Id()) + ", " + worker.quote(user.Get_User_Username())+ ", " + worker.quote(user.Get_User_First_Name()) + ")");
+        worker.commit();
+    }
+    catch (const std::exception& ex)
+    {
+        ALogger_Utility::Error(ex.what());
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+AUser ADB_Controller::Get_User(std::int64_t user_id)
+{
+    try
+    {
+        pqxx::connection connection(Connection_String.c_str());
+        pqxx::work worker(connection);
+
+        pqxx::result response = worker.exec("SELECT id, first_name, username FROM user_data WHERE id = " + worker.quote(user_id));
+        worker.commit();
+
+        return AUser(response[0][0].as<std::int64_t>(), response[0][1].as<std::string>(), response[0][2].as<std::string>());
+    }
+    catch (const std::exception& ex)
+    {
+        ALogger_Utility::Error(ex.what());
+    }
+
+    return AUser();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ADB_Controller::Update_User_Data(const AUser& user)
+{
+    try
+    {
+        pqxx::connection connection(Connection_String.c_str());
+        pqxx::work worker(connection);
+
+        worker.exec("UPDATE user_data SET id = " + worker.quote(user.Get_User_Id()) + ", username = " + worker.quote(user.Get_User_Username()) + ", first_name = " + worker.quote(user.Get_User_First_Name()));
         worker.commit();
     }
     catch (const std::exception& ex)
