@@ -6,7 +6,7 @@
 class AUser
 {
 public:
-    explicit AUser() = default;
+    explicit AUser();
     explicit AUser(std::int64_t user_id, std::string&& first_name, std::string&& username);
 
     ~AUser() = default;

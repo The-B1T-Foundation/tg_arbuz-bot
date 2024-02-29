@@ -14,6 +14,8 @@ public:
 
     bool Is_User_Exists(std::int64_t user_id);
     void Create_User(const AUser& user);
+    AUser Get_User(std::int64_t user_id);
+    void Update_User_Data(const AUser& user);
 
 private:
     std::string Connection_String;
