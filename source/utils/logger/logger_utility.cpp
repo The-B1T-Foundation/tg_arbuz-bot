@@ -1,5 +1,6 @@
 #include "logger_utility.hpp"
 
+// ---------------------------------------------------------------------------------------------------------------------
 void ALogger_Utility::Message(const std::string& message)
 {
     const auto now = std::chrono::system_clock::now();
@@ -8,6 +9,7 @@ void ALogger_Utility::Message(const std::string& message)
     std::cout << "\033[1;32m|MESSAGE|\033[0m " << message << " \033[1;32m|Date ---> " << std::ctime(&t_c) << "\033[0m";
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 void ALogger_Utility::Error(const std::string& error)
 {
     const auto now = std::chrono::system_clock::now();

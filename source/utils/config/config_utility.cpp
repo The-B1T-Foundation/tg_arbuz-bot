@@ -1,5 +1,6 @@
 #include "config_utility.hpp"
 
+// ---------------------------------------------------------------------------------------------------------------------
 std::optional<AConfig> AConfig_Utility::Load_Config()
 {
     const char* tg_token = std::getenv("TG_TOKEN");

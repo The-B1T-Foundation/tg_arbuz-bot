@@ -14,6 +14,7 @@ add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
 target_link_libraries(${LIBRARY_NAME}
         TG_API
         TG_ARBUZ_BOT_BUSINESS_LOGIC
+        MESSAGE_COMMANDS
 )
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)
