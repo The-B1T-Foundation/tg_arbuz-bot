@@ -14,3 +14,4 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_subdirectory(message_handler)
+add_subdirectory(message_commands)
