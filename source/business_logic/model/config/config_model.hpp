@@ -5,21 +5,21 @@
 class AConfig
 {
 public:
-    explicit AConfig(std::string&& tg_token, std::string&& pg_host, std::string&& pg_port, std::string&& pg_db_name, std::string&& pg_user, std::string&& pg_password);
+    explicit AConfig(std::string_view tg_token, std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password);
     ~AConfig() = default;
 
-    [[nodiscard]] const std::string& Get_TG_Token() const;
-    [[nodiscard]] const std::string& Get_PG_Host() const;
-    [[nodiscard]] const std::string& Get_PG_Port() const;
-    [[nodiscard]] const std::string& Get_PG_DB_Name() const;
-    [[nodiscard]] const std::string& Get_PG_User() const;
-    [[nodiscard]] const std::string& Get_PG_Password() const;
+    [[nodiscard]] std::string_view Get_TG_Token() const;
+    [[nodiscard]] std::string_view Get_PG_Host() const;
+    [[nodiscard]] std::string_view Get_PG_Port() const;
+    [[nodiscard]] std::string_view Get_PG_DB_Name() const;
+    [[nodiscard]] std::string_view Get_PG_User() const;
+    [[nodiscard]] std::string_view Get_PG_Password() const;
 
 private:
-    std::string TG_Token;
-    std::string PG_Host;
-    std::string PG_Port;
-    std::string PG_DB_Name;
-    std::string PG_User;
-    std::string PG_Password;
+    std::string_view TG_Token;
+    std::string_view PG_Host;
+    std::string_view PG_Port;
+    std::string_view PG_DB_Name;
+    std::string_view PG_User;
+    std::string_view PG_Password;
 };

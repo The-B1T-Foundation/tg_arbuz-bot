@@ -6,7 +6,7 @@
 class AConfig_Utility
 {
 public:
-    AConfig_Utility() = default;
+    constexpr AConfig_Utility() = default;
     ~AConfig_Utility() = default;
 
     static std::optional<AConfig> Load_Config();

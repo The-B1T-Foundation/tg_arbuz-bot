@@ -7,7 +7,7 @@
 int main()
 {
 #if 1
-    auto cfg = AConfig_Utility::Load_Config();
+    auto cfg{ AConfig_Utility::Load_Config() };
 
     if (cfg == std::nullopt)
     {
@@ -16,10 +16,10 @@ int main()
     }
 #endif
 
-    TgBot::Bot tg_bot(cfg->Get_TG_Token());
-    ADB_Controller db_controller(*cfg);
+    TgBot::Bot tg_bot{ cfg->Get_TG_Token().data() };
+    ADB_Controller db_controller{ *cfg };
 
-    AMessage_Handler message_handler(tg_bot, db_controller);
+    AMessage_Handler message_handler{ tg_bot, db_controller };
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
         message_handler.Handle_All_Messages(message);
@@ -27,8 +27,8 @@ int main()
 
     try
     {
-        ALogger_Utility::Message(std::string("Bot username: ") + tg_bot.getApi().getMe()->username);
-        TgBot::TgLongPoll long_poll(tg_bot);
+        ALogger_Utility::Message(std::string{ "Bot username: " } + tg_bot.getApi().getMe()->username);
+        TgBot::TgLongPoll long_poll{ tg_bot };
 
         while(true)
         {
