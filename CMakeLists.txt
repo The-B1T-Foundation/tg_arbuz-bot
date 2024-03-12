@@ -10,7 +10,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_compile_options(-Wall -Wextra -v)
 
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(Boost_USE_MULTITHREADED ON)
 
 add_subdirectory(libs)
 add_subdirectory(source)
+add_subdirectory(tests)
