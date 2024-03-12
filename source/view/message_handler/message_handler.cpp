@@ -12,12 +12,11 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
 
     if (message->text == SMessage_Commands::Start)
     {
-        TG_Bot.getApi().sendMessage(message->chat->id, "Hello, Dear User");
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
     }
     else if (message->text == SMessage_Commands::Profile)
     {
-        AUser current_user = DB_Controller.Get_User(message->from->id);
-        TG_Bot.getApi().sendMessage(message->chat->id, "Info: " + std::to_string(current_user.Get_User_Id()) + " " + current_user.Get_User_First_Name() + " " + current_user.Get_User_Username());
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(message->from->id));
     }
 }
 

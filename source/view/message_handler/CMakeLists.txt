@@ -15,6 +15,7 @@ target_link_libraries(${LIBRARY_NAME}
         TG_API
         TG_ARBUZ_BOT_BUSINESS_LOGIC
         MESSAGE_COMMANDS
+        MESSAGE_REPLY
 )
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)

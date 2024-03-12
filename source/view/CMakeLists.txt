@@ -15,3 +15,6 @@ target_link_libraries(${PROJECT_NAME}
 
 add_subdirectory(message_handler)
 add_subdirectory(message_commands)
+add_subdirectory(message_reply)
+
+add_subdirectory(emoji)

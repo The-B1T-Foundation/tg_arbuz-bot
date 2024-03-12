@@ -4,6 +4,7 @@
 #include <db_controller.hpp>
 #include <user_model.hpp>
 #include <message_commands.hpp>
+#include <message_reply.hpp>
 
 class AMessage_Handler
 {
