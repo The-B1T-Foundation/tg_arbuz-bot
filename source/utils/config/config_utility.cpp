@@ -39,5 +39,5 @@ std::optional<AConfig> AConfig_Utility::Load_Config()
         return std::nullopt;
     }
 
-    return AConfig(tg_token, pg_host, pg_port, pg_db_name, pg_user, pg_password);
+    return AConfig{ tg_token, pg_host, pg_port, pg_db_name, pg_user, pg_password };
 }
