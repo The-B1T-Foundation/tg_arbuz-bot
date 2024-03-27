@@ -2,9 +2,11 @@
 
 #include <pqxx/pqxx>
 
-#include <config_model.hpp>
-#include <logger_utility.hpp>
-#include <user_model.hpp>
+#include <model/config/config_model.hpp>
+#include <model/user/user_model.hpp>
+
+#include <logger/logger_utility.hpp>
+
 
 class ADB_Controller
 {

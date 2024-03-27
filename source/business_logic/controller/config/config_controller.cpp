@@ -1,7 +1,7 @@
-#include "config_utility.hpp"
+#include "config_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::optional<AConfig> AConfig_Utility::Load_Config()
+std::optional<AConfig> AConfig_Controller::Load_Config()
 {
     const char* tg_token{ std::getenv("TG_TOKEN") };
     if (!tg_token)
