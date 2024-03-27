@@ -1,13 +1,14 @@
 #include <tgbot/tgbot.h>
 
-#include <logger_utility.hpp>
-#include <config_utility.hpp>
+#include <logger/logger_utility.hpp>
+#include <controller/config/config_controller.hpp>
 #include <message_handler.hpp>
 
 int main()
 {
+
 #if 1
-    auto cfg{ AConfig_Utility::Load_Config() };
+    auto cfg{ AConfig_Controller::Load_Config() };
 
     if (cfg == std::nullopt)
     {

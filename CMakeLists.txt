@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-add_compile_options(-Wall -Wextra -v)
+add_compile_options(-Wall -Wextra)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(Boost_USE_MULTITHREADED ON)

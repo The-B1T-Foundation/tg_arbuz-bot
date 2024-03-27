@@ -1,8 +1,8 @@
 #pragma once
 
 #include <tgbot/tgbot.h>
-#include <db_controller.hpp>
-#include <user_model.hpp>
+#include <controller/db/db_controller.hpp>
+#include <model/user/user_model.hpp>
 #include <message_commands.hpp>
 #include <message_reply.hpp>
 
