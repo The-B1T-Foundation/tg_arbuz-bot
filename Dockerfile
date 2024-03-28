@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 
+# TODO: FIX building
 FROM silkeh/clang:latest
 
 WORKDIR /app
