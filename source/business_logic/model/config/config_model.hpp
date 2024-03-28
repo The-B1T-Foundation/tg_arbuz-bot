@@ -29,7 +29,7 @@ class AConfig
 {
 public:
     explicit AConfig(std::string_view tg_token, std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password);
-    ~AConfig() = default;
+    constexpr ~AConfig() = default;
 
     [[nodiscard]] std::string_view Get_TG_Token() const;
     [[nodiscard]] std::string_view Get_PG_Host() const;
