@@ -31,7 +31,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-add_compile_options(-Wall -Wextra)
+add_compile_options(-Wall -Wextra -stdlib=libstdc++)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(Boost_USE_MULTITHREADED ON)
