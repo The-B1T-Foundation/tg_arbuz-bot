@@ -25,6 +25,7 @@
 
 #include <string>
 #include <cstdint>
+#include <format>
 
 #include <emoji.hpp>
 
