@@ -20,22 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 cmake_minimum_required(VERSION 3.14)
 
-project(tg_arbuz-bot LANGUAGES C CXX)
+set(LIBRARY_NAME UTF8_USTRING)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(HEADERS utf8_string.hpp)
+set(SOURCES utf8_string.cpp)
 
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-
-add_compile_options(-Wall -Wextra -stdlib=libstdc++)
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-set(Boost_USE_MULTITHREADED ON)
-
-add_subdirectory(libs)
-add_subdirectory(source)
-add_subdirectory(tests)
+add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
+target_include_directories(${LIBRARY_NAME} PUBLIC ./)

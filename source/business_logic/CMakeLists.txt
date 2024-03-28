@@ -52,7 +52,7 @@ add_library(${LIBRARY_NAME} STATIC
         ${CONTROLLER_SOURCES})
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)
-target_link_libraries(${LIBRARY_NAME} PUBLIC UTILS POSTGRE_SQL)
+target_link_libraries(${LIBRARY_NAME} PUBLIC UTILS POSTGRE_SQL UTF8_USTRING)
 
 include_directories(model)
 include_directories(controller)

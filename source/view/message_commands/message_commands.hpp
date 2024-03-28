@@ -27,6 +27,6 @@
 
 struct SMessage_Commands
 {
-    const static std::string Start;
-    const static std::string Profile;
+    constinit static std::string_view Start;
+    constinit static std::string_view Profile;
 };
