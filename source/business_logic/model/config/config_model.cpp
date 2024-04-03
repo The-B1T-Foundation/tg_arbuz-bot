@@ -25,7 +25,7 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 AConfig::AConfig(std::string_view tg_token, std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password) :
-    TG_Token(tg_token), PG_Host(pg_host), PG_Port(pg_port), PG_DB_Name(pg_db_name), PG_User(pg_user), PG_Password(pg_password)
+    TG_Token{ tg_token }, PG_Host{ pg_host }, PG_Port{ pg_port }, PG_DB_Name{ pg_db_name }, PG_User{ pg_user }, PG_Password{ pg_password }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------

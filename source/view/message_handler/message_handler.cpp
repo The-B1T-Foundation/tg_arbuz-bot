@@ -25,7 +25,7 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, ADB_Controller& db_controller) :
-    TG_Bot(tg_bot), DB_Controller(db_controller)
+    TG_Bot{ tg_bot }, DB_Controller{ db_controller }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------

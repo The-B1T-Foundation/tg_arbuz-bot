@@ -79,14 +79,14 @@ AUser ADB_Controller::Get_User(std::int64_t user_id)
         pqxx::result response{ worker.exec("SELECT id, first_name, username FROM user_data WHERE id = " + worker.quote(user_id)) };
         worker.commit();
 
-        return AUser(response[0][0].as<std::int64_t>(), response[0][1].as<std::string>(), response[0][2].as<std::string>());
+        return AUser{ response[0][0].as<std::int64_t>(), response[0][1].as<std::string>(), response[0][2].as<std::string>() };
     }
     catch (const std::exception& ex)
     {
         ALogger_Utility::Error(ex.what());
     }
 
-    return AUser();
+    return AUser{};
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
