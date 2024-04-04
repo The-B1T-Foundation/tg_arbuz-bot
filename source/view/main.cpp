@@ -41,7 +41,7 @@ int main()
 #endif
 
     TgBot::Bot tg_bot{ cfg->Get_TG_Token().data() };
-    ADB_Controller db_controller{ *cfg };
+    AUser_DB_Controller db_controller{ *cfg };
 
     AMessage_Handler message_handler{ tg_bot, db_controller };
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
