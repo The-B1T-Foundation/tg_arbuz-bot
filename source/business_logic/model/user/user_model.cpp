@@ -29,8 +29,8 @@ AUser::AUser() :
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
-AUser::AUser(std::int64_t user_id, const std::string& first_name, const std::string& username) :
-    User_Id{ user_id }, First_Name{ first_name }, Username{ username }
+AUser::AUser(std::int64_t user_id, std::string first_name, std::string username) :
+    User_Id{ user_id }, First_Name{ std::move(first_name) }, Username{ std::move(username) }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------

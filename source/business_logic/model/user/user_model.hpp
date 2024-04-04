@@ -30,7 +30,7 @@ class AUser
 {
 public:
     explicit AUser();
-    explicit AUser(std::int64_t user_id, const std::string& first_name, const std::string& username);
+    explicit AUser(std::int64_t user_id, std::string first_name, std::string username);
 
     constexpr ~AUser() = default;
 
