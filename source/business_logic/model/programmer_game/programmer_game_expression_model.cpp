@@ -21,13 +21,12 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "programmer_game_expression_model.hpp"
 
-#include <string>
-
-struct SMessage_Commands
+namespace programmer_game
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-};
+    // -----------------------------------------------------------------------------------------------------------------
+    SExpression::SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation) :
+            First_Operand{ std::move(first_operand) }, Second_Operand{ std::move(second_operand) }, Operation{ std::move(operation) }
+    { }
+}

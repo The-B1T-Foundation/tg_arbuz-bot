@@ -20,11 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, ADB_Controller& db_controller) :
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& db_controller) :
     TG_Bot{ tg_bot }, DB_Controller{ db_controller }
 { }
 
@@ -40,6 +39,12 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     else if (message->text == SMessage_Commands::Profile)
     {
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(message->from->id));
+    }
+    else if (message->text == SMessage_Commands::Programmer_Game)
+    {
+        AProgrammer_Game_Controller ctrl;
+        programmer_game::SExpression expression{ ctrl.Generate_Expression() };
+        TG_Bot.getApi().sendMessage(message->chat->id, std::format("{} {} {} = ?\nAnswer: {}", expression.First_Operand, expression.Operation, expression.Second_Operand, ctrl.Get_Correct_Result()));
     }
 }
 

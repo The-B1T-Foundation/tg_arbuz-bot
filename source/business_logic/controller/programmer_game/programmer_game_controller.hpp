@@ -23,11 +23,23 @@
 
 #pragma once
 
-#include <string>
+#include <random>
+#include <cstdint>
+#include <bitset>
 
-struct SMessage_Commands
+#include <model/programmer_game/programmer_game_expression_model.hpp>
+
+class AProgrammer_Game_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
+public:
+    constexpr AProgrammer_Game_Controller() = default;
+    constexpr ~AProgrammer_Game_Controller() = default;
+
+    programmer_game::SExpression Generate_Expression();
+    [[nodiscard]] bool Check_Solution(std::string_view solution) const;
+
+    [[nodiscard]] std::string_view Get_Correct_Result() const;
+
+private:
+    std::string Result_Expression;
 };

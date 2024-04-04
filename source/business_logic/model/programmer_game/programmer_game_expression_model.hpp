@@ -25,9 +25,17 @@
 
 #include <string>
 
-struct SMessage_Commands
+namespace programmer_game
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-};
+    struct SExpression
+    {
+    public:
+        explicit SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation);
+        constexpr ~SExpression() = default;
+
+    public:
+        std::string First_Operand;
+        std::string Second_Operand;
+        std::string Operation;
+    };
+}
