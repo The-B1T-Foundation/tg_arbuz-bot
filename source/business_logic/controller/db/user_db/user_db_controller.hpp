@@ -25,17 +25,16 @@
 
 #include <pqxx/pqxx>
 
-#include <model/config/config_model.hpp>
-#include <model/user/user_model.hpp>
+#include "model/config/config_model.hpp"
+#include "model/user/user_model.hpp"
 
-#include <logger/logger_utility.hpp>
+#include "logger/logger_utility.hpp"
 
-
-class ADB_Controller
+class AUser_DB_Controller
 {
 public:
-    explicit ADB_Controller(const AConfig& cfg);
-    constexpr ~ADB_Controller() = default;
+    explicit AUser_DB_Controller(const AConfig& cfg);
+    constexpr ~AUser_DB_Controller() = default;
 
     bool Is_User_Exists(std::int64_t user_id);
     void Create_User(const AUser& user);
@@ -43,5 +42,6 @@ public:
     void Update_User_Data(const AUser& user);
 
 private:
+    std::string_view Table_Name;
     std::string Connection_String;
 };

@@ -24,15 +24,17 @@
 #pragma once
 
 #include <tgbot/tgbot.h>
-#include <controller/db/db_controller.hpp>
+
+#include "controller/db/user_db/user_db_controller.hpp"
 #include <model/user/user_model.hpp>
 #include <message_commands.hpp>
 #include <message_reply.hpp>
+#include <controller/programmer_game/programmer_game_controller.hpp>
 
 class AMessage_Handler
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, ADB_Controller& db_controller);
+    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& db_controller);
     constexpr ~AMessage_Handler() = default;
 
     void Handle_All_Messages(const TgBot::Message::Ptr& message);
@@ -42,5 +44,5 @@ private:
 
 private:
     TgBot::Bot& TG_Bot;
-    ADB_Controller& DB_Controller;
+    AUser_DB_Controller& DB_Controller;
 };

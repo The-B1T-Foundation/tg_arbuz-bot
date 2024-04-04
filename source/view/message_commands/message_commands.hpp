@@ -29,4 +29,5 @@ struct SMessage_Commands
 {
     constinit static std::string_view Start;
     constinit static std::string_view Profile;
+    constinit static std::string_view Programmer_Game;
 };

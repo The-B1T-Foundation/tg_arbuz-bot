@@ -24,22 +24,18 @@
 #pragma once
 
 #include <string>
-#include <cstdint>
 
-class AUser
+namespace programmer_game
 {
-public:
-    explicit AUser();
-    explicit AUser(std::int64_t user_id, std::string first_name, std::string username);
+    struct SExpression
+    {
+    public:
+        explicit SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation);
+        constexpr ~SExpression() = default;
 
-    constexpr ~AUser() = default;
-
-    [[nodiscard]] std::int64_t Get_User_Id() const;
-    [[nodiscard]] const std::string& Get_User_First_Name() const;
-    [[nodiscard]] const std::string& Get_User_Username() const;
-
-private:
-    std::int64_t User_Id;
-    std::string First_Name;
-    std::string Username;
-};
+    public:
+        std::string First_Operand;
+        std::string Second_Operand;
+        std::string Operation;
+    };
+}

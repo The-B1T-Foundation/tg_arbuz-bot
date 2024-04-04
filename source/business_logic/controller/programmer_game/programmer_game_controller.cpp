@@ -21,32 +21,46 @@
 // SOFTWARE.
 
 
-#include "user_model.hpp"
+#include "programmer_game_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AUser::AUser() :
-    User_Id{}, First_Name{}, Username{}
-{ }
-
-// ---------------------------------------------------------------------------------------------------------------------
-AUser::AUser(std::int64_t user_id, std::string first_name, std::string username) :
-    User_Id{ user_id }, First_Name{ std::move(first_name) }, Username{ std::move(username) }
-{ }
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::int64_t AUser::Get_User_Id() const
+programmer_game::SExpression AProgrammer_Game_Controller::Generate_Expression()
 {
-    return User_Id;
+    typedef std::bitset<UINT8_WIDTH> bitset;
+    using namespace programmer_game;
+
+    std::random_device rd{};
+    std::mt19937 gen{ rd() };
+    std::uniform_int_distribution<> distribution{ 0, 100 };
+
+    auto first_operand{ static_cast<std::uint8_t>(distribution(gen)) };
+    auto second_operand{ static_cast<std::uint8_t>(distribution(gen)) };
+
+    if (distribution(gen) & 1)
+    {
+        Result_Expression = bitset(first_operand | second_operand).to_string();
+        return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "|" };
+    }
+
+    Result_Expression = bitset(first_operand & second_operand).to_string();
+    return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "&" };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-const std::string& AUser::Get_User_First_Name() const
+bool AProgrammer_Game_Controller::Check_Solution(std::string_view solution) const
 {
-    return First_Name;
+    if (solution.size() != Result_Expression.size())
+    {
+        return false;
+    }
+
+    // TODO: .................................................................................................
+    return (Result_Expression == solution);
+    // return common_nasm_tools::Compare_String(Result_Expression.c_str(), solution.c_str(), solution.size());
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-const std::string& AUser::Get_User_Username() const
+std::string_view AProgrammer_Game_Controller::Get_Correct_Result() const
 {
-    return Username;
+    return Result_Expression;
 }

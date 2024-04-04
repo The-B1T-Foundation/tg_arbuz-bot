@@ -23,23 +23,23 @@
 
 #pragma once
 
-#include <string>
+#include <random>
 #include <cstdint>
+#include <bitset>
 
-class AUser
+#include <model/programmer_game/programmer_game_expression_model.hpp>
+
+class AProgrammer_Game_Controller
 {
 public:
-    explicit AUser();
-    explicit AUser(std::int64_t user_id, std::string first_name, std::string username);
+    constexpr AProgrammer_Game_Controller() = default;
+    constexpr ~AProgrammer_Game_Controller() = default;
 
-    constexpr ~AUser() = default;
+    programmer_game::SExpression Generate_Expression();
+    [[nodiscard]] bool Check_Solution(std::string_view solution) const;
 
-    [[nodiscard]] std::int64_t Get_User_Id() const;
-    [[nodiscard]] const std::string& Get_User_First_Name() const;
-    [[nodiscard]] const std::string& Get_User_Username() const;
+    [[nodiscard]] std::string_view Get_Correct_Result() const;
 
 private:
-    std::int64_t User_Id;
-    std::string First_Name;
-    std::string Username;
+    std::string Result_Expression;
 };

@@ -21,25 +21,12 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "programmer_game_expression_model.hpp"
 
-#include <string>
-#include <cstdint>
-
-class AUser
+namespace programmer_game
 {
-public:
-    explicit AUser();
-    explicit AUser(std::int64_t user_id, std::string first_name, std::string username);
-
-    constexpr ~AUser() = default;
-
-    [[nodiscard]] std::int64_t Get_User_Id() const;
-    [[nodiscard]] const std::string& Get_User_First_Name() const;
-    [[nodiscard]] const std::string& Get_User_Username() const;
-
-private:
-    std::int64_t User_Id;
-    std::string First_Name;
-    std::string Username;
-};
+    // -----------------------------------------------------------------------------------------------------------------
+    SExpression::SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation) :
+            First_Operand{ std::move(first_operand) }, Second_Operand{ std::move(second_operand) }, Operation{ std::move(operation) }
+    { }
+}

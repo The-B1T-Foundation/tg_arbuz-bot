@@ -28,21 +28,25 @@ set(LIBRARY_NAME TG_ARBUZ_BOT_BUSINESS_LOGIC)
 set(MODEL_HEADERS
         model/config/config_model.hpp
         model/user/user_model.hpp
+        model/programmer_game/programmer_game_expression_model.hpp
 )
 
 set(MODEL_SOURCES
         model/config/config_model.cpp
         model/user/user_model.cpp
+        model/programmer_game/programmer_game_expression_model.cpp
 )
 
 set(CONTROLLER_HEADERS
-        controller/db/db_controller.hpp
+        controller/db/user_db/user_db_controller.hpp
         controller/config/config_controller.hpp
+        controller/programmer_game/programmer_game_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
-        controller/db/db_controller.cpp
+        controller/db/user_db/user_db_controller.cpp
         controller/config/config_controller.cpp
+        controller/programmer_game/programmer_game_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC

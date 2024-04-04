@@ -25,3 +25,4 @@
 
 constinit std::string_view SMessage_Commands::Start{ "/start" };
 constinit std::string_view SMessage_Commands::Profile{ "/profile" };
+constinit std::string_view SMessage_Commands::Programmer_Game{ "/pr_game" };
