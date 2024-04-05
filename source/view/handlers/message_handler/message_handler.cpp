@@ -23,14 +23,15 @@
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller) :
-        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller) :
+        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
 {
     Auto_Register(message->from->id, message->from->username, message->from->firstName);
+    AState_DB_Controller::EState_Type current_user_status{ State_DB_Controller.Get_State(message->from->id) };
 
     if (message->text == SMessage_Commands::Start)
     {
@@ -42,8 +43,15 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     }
     else if (message->text == SMessage_Commands::Programmer_Game)
     {
-        auto expression{ Generate_Programmer_Expression() };
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Programmer_Game_Msg(expression));
+        // TODO:
+        TG_Bot.getApi().sendMessage(message->chat->id, "test expression");
+        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
+    }
+    else if (current_user_status == AState_DB_Controller::EState_Type::Programmer_Game)
+    {
+        // TODO:
+        TG_Bot.getApi().sendMessage(message->chat->id, "Programmer game status: ON");
+        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Default);
     }
 }
 
@@ -53,18 +61,6 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
     if (!User_DB_Controller.Is_User_Exists(user_id))
     {
         User_DB_Controller.Create_User(AUser{ user_id, first_name.data(), username.data() });
+        State_DB_Controller.Create_Default_State(user_id);
     }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-programmer_game::SExpression AMessage_Handler::Generate_Programmer_Expression()
-{
-    AProgrammer_Game_Controller programmer_game_controller{};
-    programmer_game::SExpression expression{ programmer_game_controller.Generate_Expression() };
-
-    // TODO: .................................................................................
-    // set state for waiting the answer to programmer game
-    // set result into db
-
-    return expression;
 }
