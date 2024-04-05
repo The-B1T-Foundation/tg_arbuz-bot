@@ -34,7 +34,7 @@
 class AMessage_Handler
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& db_controller);
+    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller);
     constexpr ~AMessage_Handler() = default;
 
     void Handle_All_Messages(const TgBot::Message::Ptr& message);
@@ -44,5 +44,5 @@ private:
 
 private:
     TgBot::Bot& TG_Bot;
-    AUser_DB_Controller& DB_Controller;
+    AUser_DB_Controller& User_DB_Controller;
 };
