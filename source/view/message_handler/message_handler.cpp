@@ -23,8 +23,8 @@
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& db_controller) :
-    TG_Bot{ tg_bot }, DB_Controller{ db_controller }
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller) :
+        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -51,8 +51,8 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
 // ---------------------------------------------------------------------------------------------------------------------
 void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name)
 {
-    if (!DB_Controller.Is_User_Exists(user_id))
+    if (!User_DB_Controller.Is_User_Exists(user_id))
     {
-        DB_Controller.Create_User(AUser(user_id, first_name.data(), username.data()));
+        User_DB_Controller.Create_User(AUser(user_id, first_name.data(), username.data()));
     }
 }
