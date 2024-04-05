@@ -34,3 +34,9 @@ std::string AMessage_Reply::Get_Profile_Msg(std::int64_t user_id)
 {
     return "Тестові данні";
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Programmer_Game_Msg(programmer_game::SExpression& expression)
+{
+    return std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand);
+}

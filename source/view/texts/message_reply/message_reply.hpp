@@ -28,6 +28,7 @@
 #include <format>
 
 #include <emoji.hpp>
+#include <model/programmer_game/programmer_game_expression_model.hpp>
 
 class AMessage_Reply
 {
@@ -37,4 +38,5 @@ public:
 
     static std::string Get_Hello_Msg(std::string_view username);
     static std::string Get_Profile_Msg(std::int64_t user_id);
+    static std::string Get_Programmer_Game_Msg(programmer_game::SExpression& expression);
 };
