@@ -25,11 +25,8 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 AUser_DB_Controller::AUser_DB_Controller(const AConfig& cfg) :
-    Table_Name{ "user_data" },
-    Connection_String{ std::format("host={} port={} dbname={} user={} password={}", cfg.Get_PG_Host(), cfg.Get_PG_Port(), cfg.Get_PG_DB_Name(), cfg.Get_PG_User(), cfg.Get_PG_Password()) }
-{
-    ALogger_Utility::Message(std::format("Connection string: {}", Connection_String));
-}
+    ABase_DB_Controller{ cfg, "user_data" }
+{ }
 
 // ---------------------------------------------------------------------------------------------------------------------
 bool AUser_DB_Controller::Is_User_Exists(std::int64_t user_id)
