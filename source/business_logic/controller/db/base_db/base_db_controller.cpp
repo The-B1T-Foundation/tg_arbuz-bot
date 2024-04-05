@@ -21,31 +21,10 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "base_db_controller.hpp"
 
-#include <tgbot/tgbot.h>
-
-#include <controller/db/user_db/user_db_controller.hpp>
-#include <controller/db/state_db/state_db_controller.hpp>
-#include <model/user/user_model.hpp>
-#include <message_commands.hpp>
-#include <message_reply.hpp>
-#include <controller/programmer_game/programmer_game_controller.hpp>
-
-class AMessage_Handler
-{
-public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller);
-    constexpr ~AMessage_Handler() = default;
-
-    void Handle_All_Messages(const TgBot::Message::Ptr& message);
-
-private:
-    [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
-
-private:
-    TgBot::Bot& TG_Bot;
-
-    AUser_DB_Controller& User_DB_Controller;
-    AState_DB_Controller& State_DB_Controller;
-};
+// ---------------------------------------------------------------------------------------------------------------------
+ABase_DB_Controller::ABase_DB_Controller(const AConfig& cfg, std::string_view table_name) :
+    Table_Name{ table_name },
+    Connection_String{ std::format("host={} port={} dbname={} user={} password={}", cfg.Get_PG_Host(), cfg.Get_PG_Port(), cfg.Get_PG_DB_Name(), cfg.Get_PG_User(), cfg.Get_PG_Password()) }
+{ }

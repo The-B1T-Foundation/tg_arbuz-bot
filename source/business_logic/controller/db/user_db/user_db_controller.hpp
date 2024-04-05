@@ -25,23 +25,18 @@
 
 #include <pqxx/pqxx>
 
-#include "model/config/config_model.hpp"
-#include "model/user/user_model.hpp"
+#include <controller/db/base_db/base_db_controller.hpp>
+#include <model/user/user_model.hpp>
+#include <logger/logger_utility.hpp>
 
-#include "logger/logger_utility.hpp"
-
-class AUser_DB_Controller
+class AUser_DB_Controller : public ABase_DB_Controller
 {
 public:
     explicit AUser_DB_Controller(const AConfig& cfg);
-    constexpr ~AUser_DB_Controller() = default;
+    ~AUser_DB_Controller() override = default;
 
     bool Is_User_Exists(std::int64_t user_id);
     void Create_User(const AUser& user);
     AUser Get_User(std::int64_t user_id);
     void Update_User_Data(const AUser& user);
-
-private:
-    std::string_view Table_Name;
-    std::string Connection_String;
 };

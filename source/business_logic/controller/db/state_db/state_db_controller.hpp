@@ -23,29 +23,26 @@
 
 #pragma once
 
-#include <tgbot/tgbot.h>
+#include <pqxx/pqxx>
 
-#include <controller/db/user_db/user_db_controller.hpp>
-#include <controller/db/state_db/state_db_controller.hpp>
-#include <model/user/user_model.hpp>
-#include <message_commands.hpp>
-#include <message_reply.hpp>
-#include <controller/programmer_game/programmer_game_controller.hpp>
+#include <controller/db/base_db/base_db_controller.hpp>
+#include <logger/logger_utility.hpp>
 
-class AMessage_Handler
+class AState_DB_Controller : public ABase_DB_Controller
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller);
-    constexpr ~AMessage_Handler() = default;
+    enum EState_Type : std::uint8_t
+    {
+        Default,
+        Programmer_Game,
+    };
 
-    void Handle_All_Messages(const TgBot::Message::Ptr& message);
+public:
+    explicit AState_DB_Controller(const AConfig& cfg);
+    ~AState_DB_Controller() override = default;
 
-private:
-    [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
+    void Create_Default_State(std::int64_t user_id);
 
-private:
-    TgBot::Bot& TG_Bot;
-
-    AUser_DB_Controller& User_DB_Controller;
-    AState_DB_Controller& State_DB_Controller;
+    void Set_State(std::int64_t user_id, EState_Type state_type);
+    EState_Type Get_State(std::int64_t user_id);
 };

@@ -23,29 +23,18 @@
 
 #pragma once
 
-#include <tgbot/tgbot.h>
+#include <string>
+#include <format>
 
-#include <controller/db/user_db/user_db_controller.hpp>
-#include <controller/db/state_db/state_db_controller.hpp>
-#include <model/user/user_model.hpp>
-#include <message_commands.hpp>
-#include <message_reply.hpp>
-#include <controller/programmer_game/programmer_game_controller.hpp>
+#include <model/config/config_model.hpp>
 
-class AMessage_Handler
+class ABase_DB_Controller
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller);
-    constexpr ~AMessage_Handler() = default;
+    [[maybe_unused]] explicit ABase_DB_Controller(const AConfig& cfg, std::string_view table_name);
+    virtual ~ABase_DB_Controller() = default;
 
-    void Handle_All_Messages(const TgBot::Message::Ptr& message);
-
-private:
-    [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
-
-private:
-    TgBot::Bot& TG_Bot;
-
-    AUser_DB_Controller& User_DB_Controller;
-    AState_DB_Controller& State_DB_Controller;
+protected:
+    std::string_view Table_Name;
+    std::string Connection_String;
 };

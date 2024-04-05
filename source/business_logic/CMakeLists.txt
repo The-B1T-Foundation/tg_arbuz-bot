@@ -41,12 +41,16 @@ set(CONTROLLER_HEADERS
         controller/db/user_db/user_db_controller.hpp
         controller/config/config_controller.hpp
         controller/programmer_game/programmer_game_controller.hpp
+        controller/db/state_db/state_db_controller.hpp
+        controller/db/base_db/base_db_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
         controller/db/user_db/user_db_controller.cpp
         controller/config/config_controller.cpp
         controller/programmer_game/programmer_game_controller.cpp
+        controller/db/state_db/state_db_controller.cpp
+        controller/db/base_db/base_db_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC

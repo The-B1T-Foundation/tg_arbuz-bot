@@ -21,43 +21,22 @@
 // SOFTWARE.
 
 
-#include "user_db_controller.hpp"
+#include "state_db_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AUser_DB_Controller::AUser_DB_Controller(const AConfig& cfg) :
-    ABase_DB_Controller{ cfg, "user_data" }
+AState_DB_Controller::AState_DB_Controller(const AConfig& cfg) :
+    ABase_DB_Controller{ cfg, "state_data" }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
-bool AUser_DB_Controller::Is_User_Exists(std::int64_t user_id)
+void AState_DB_Controller::Create_Default_State(std::int64_t user_id)
 {
     try
     {
         pqxx::connection connection{ Connection_String.c_str() };
         pqxx::work worker{ connection };
 
-        pqxx::result response{ worker.exec(std::format(R"(SELECT COUNT(*) FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-        worker.commit();
-
-        return response[0][0].as<std::int64_t>() != 0;
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
-
-    return false;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void AUser_DB_Controller::Create_User(const AUser& user)
-{
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(INSERT INTO {} (id, username, first_name) VALUES ('{}', '{}', '{}'))", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
+        worker.exec(std::format(R"(INSERT INTO {} (id, state) VALUES ('{}', '{}'))", Table_Name, user_id, static_cast<std::uint32_t>(EState_Type::Default)));
         worker.commit();
     }
     catch (const std::exception& ex)
@@ -67,39 +46,39 @@ void AUser_DB_Controller::Create_User(const AUser& user)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-AUser AUser_DB_Controller::Get_User(std::int64_t user_id)
+void AState_DB_Controller::Set_State(std::int64_t user_id, EState_Type state_type)
 {
     try
     {
         pqxx::connection connection{ Connection_String.c_str() };
         pqxx::work worker{ connection };
 
-        pqxx::result response{ worker.exec(std::format(R"(SELECT id, first_name, username FROM {} WHERE id = '{}')", Table_Name, user_id)) };
+        worker.exec(std::format(R"(UPDATE {} SET state = '{}' WHERE id = '{}')", Table_Name, static_cast<std::uint32_t>(state_type), user_id));
         worker.commit();
-
-        return AUser{ response[0][0].as<std::int64_t>(), response[0][1].as<std::string>(), response[0][2].as<std::string>() };
     }
     catch (const std::exception& ex)
     {
         ALogger_Utility::Error(ex.what());
     }
-
-    return AUser{};
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void AUser_DB_Controller::Update_User_Data(const AUser& user)
+AState_DB_Controller::EState_Type AState_DB_Controller::Get_State(std::int64_t user_id)
 {
     try
     {
         pqxx::connection connection{ Connection_String.c_str() };
         pqxx::work worker{ connection };
 
-        worker.exec(std::format(R"(UPDATE {} SET id = '{}', username = '{}', first_name = '{}')", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
+        pqxx::result response{ worker.exec(std::format(R"(SELECT state FROM {} WHERE id = '{}')", Table_Name, user_id)) };
         worker.commit();
+
+        return static_cast<EState_Type>(response[0][0].as<std::uint32_t>());
     }
     catch (const std::exception& ex)
     {
         ALogger_Utility::Error(ex.what());
     }
+
+    return EState_Type::Default;
 }

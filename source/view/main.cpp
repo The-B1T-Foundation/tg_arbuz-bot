@@ -41,9 +41,11 @@ int main()
 #endif
 
     TgBot::Bot tg_bot{ cfg->Get_TG_Token().data() };
-    AUser_DB_Controller db_controller{ *cfg };
 
-    AMessage_Handler message_handler{ tg_bot, db_controller };
+    AUser_DB_Controller user_db_controller{ *cfg };
+    AState_DB_Controller state_db_controller{ *cfg };
+
+    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller };
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
         message_handler.Handle_All_Messages(message);
