@@ -40,7 +40,8 @@ public:
     void Handle_All_Messages(const TgBot::Message::Ptr& message);
 
 private:
-    void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
+    [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
+    [[clang::always_inline]] __inline__ programmer_game::SExpression Generate_Programmer_Expression();
 
 private:
     TgBot::Bot& TG_Bot;

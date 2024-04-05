@@ -42,9 +42,8 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     }
     else if (message->text == SMessage_Commands::Programmer_Game)
     {
-        AProgrammer_Game_Controller ctrl;
-        programmer_game::SExpression expression{ ctrl.Generate_Expression() };
-        TG_Bot.getApi().sendMessage(message->chat->id, std::format("{} {} {} = ?\nAnswer: {}", expression.First_Operand, expression.Operation, expression.Second_Operand, ctrl.Get_Correct_Result()));
+        auto expression{ Generate_Programmer_Expression() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Programmer_Game_Msg(expression));
     }
 }
 
@@ -53,6 +52,19 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
 {
     if (!User_DB_Controller.Is_User_Exists(user_id))
     {
-        User_DB_Controller.Create_User(AUser(user_id, first_name.data(), username.data()));
+        User_DB_Controller.Create_User(AUser{ user_id, first_name.data(), username.data() });
     }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+programmer_game::SExpression AMessage_Handler::Generate_Programmer_Expression()
+{
+    AProgrammer_Game_Controller programmer_game_controller{};
+    programmer_game::SExpression expression{ programmer_game_controller.Generate_Expression() };
+
+    // TODO: .................................................................................
+    // set state for waiting the answer to programmer game
+    // set result into db
+
+    return expression;
 }
