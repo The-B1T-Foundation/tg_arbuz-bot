@@ -23,26 +23,15 @@
 
 #pragma once
 
-#include <string>
+#include <optional>
 
-class AConfig
+#include <model/config/db_config/db_config_model.hpp>
+
+class ADB_Config_Controller
 {
 public:
-    explicit AConfig(std::string_view tg_token, std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password);
-    constexpr ~AConfig() = default;
+    constexpr ADB_Config_Controller() = default;
+    constexpr ~ADB_Config_Controller() = default;
 
-    [[nodiscard]] std::string_view Get_TG_Token() const;
-    [[nodiscard]] std::string_view Get_PG_Host() const;
-    [[nodiscard]] std::string_view Get_PG_Port() const;
-    [[nodiscard]] std::string_view Get_PG_DB_Name() const;
-    [[nodiscard]] std::string_view Get_PG_User() const;
-    [[nodiscard]] std::string_view Get_PG_Password() const;
-
-private:
-    std::string_view TG_Token;
-    std::string_view PG_Host;
-    std::string_view PG_Port;
-    std::string_view PG_DB_Name;
-    std::string_view PG_User;
-    std::string_view PG_Password;
+    static std::optional<ADB_Config> Load_Config();
 };

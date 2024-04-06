@@ -21,28 +21,39 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "db_config_controller.hpp"
 
-#include <pqxx/pqxx>
-
-#include <controller/db/base_db/base_db_controller.hpp>
-#include <logger/logger_utility.hpp>
-
-class AState_DB_Controller : public ABase_DB_Controller
+std::optional<ADB_Config> ADB_Config_Controller::Load_Config()
 {
-public:
-    enum EState_Type : std::uint8_t
+    const char* pg_host{ std::getenv("POSTGRES_HOST") };
+    if (!pg_host)
     {
-        Default,
-        Programmer_Game,
-    };
+        return std::nullopt;
+    }
 
-public:
-    explicit AState_DB_Controller(const ADB_Config& db_cfg);
-    ~AState_DB_Controller() override = default;
+    const char* pg_port{ std::getenv("POSTGRES_PORT") };
+    if (!pg_port)
+    {
+        return std::nullopt;
+    }
 
-    void Create_Default_State(std::int64_t user_id);
+    const char* pg_db_name{ std::getenv("POSTGRES_DB") };
+    if (!pg_db_name)
+    {
+        return std::nullopt;
+    }
 
-    void Set_State(std::int64_t user_id, EState_Type state_type);
-    EState_Type Get_State(std::int64_t user_id);
-};
+    const char* pg_user{ std::getenv("POSTGRES_USER") };
+    if (!pg_user)
+    {
+        return std::nullopt;
+    }
+
+    const char* pg_password{ std::getenv("POSTGRES_PASSWORD") };
+    if (!pg_password)
+    {
+        return std::nullopt;
+    }
+
+    return ADB_Config{ pg_host, pg_port, pg_db_name, pg_user, pg_password };
+}

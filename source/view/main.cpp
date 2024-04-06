@@ -23,27 +23,35 @@
 
 #include <tgbot/tgbot.h>
 
+#include <controller/config/db_config/db_config_controller.hpp>
+#include <controller/config/tg_config/tg_config_controller.hpp>
+
 #include <logger/logger_utility.hpp>
-#include <controller/config/config_controller.hpp>
 #include <message_handler.hpp>
 
 int main()
 {
 
 #if 1
-    auto cfg{ AConfig_Controller::Load_Config() };
-
-    if (cfg == std::nullopt)
+    auto tg_cfg{ ATG_Config_Controller::Load_Config() };
+    if (tg_cfg == std::nullopt)
     {
-        ALogger_Utility::Error("Error reading config data");
+        ALogger_Utility::Error("Error reading tg config data");
+        return -1;
+    }
+
+    auto db_cfg{ ADB_Config_Controller::Load_Config() };
+    if (db_cfg == std::nullopt)
+    {
+        ALogger_Utility::Error("Error reading db config data");
         return -1;
     }
 #endif
 
-    TgBot::Bot tg_bot{ cfg->Get_TG_Token().data() };
+    TgBot::Bot tg_bot{ tg_cfg->Get_TG_Token().data() };
 
-    AUser_DB_Controller user_db_controller{ *cfg };
-    AState_DB_Controller state_db_controller{ *cfg };
+    AUser_DB_Controller user_db_controller{ *db_cfg };
+    AState_DB_Controller state_db_controller{ *db_cfg };
 
     AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller };
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void

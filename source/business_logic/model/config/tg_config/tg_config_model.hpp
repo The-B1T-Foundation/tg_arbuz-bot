@@ -23,26 +23,16 @@
 
 #pragma once
 
-#include <pqxx/pqxx>
+#include <string>
 
-#include <controller/db/base_db/base_db_controller.hpp>
-#include <logger/logger_utility.hpp>
-
-class AState_DB_Controller : public ABase_DB_Controller
+class ATG_Config
 {
 public:
-    enum EState_Type : std::uint8_t
-    {
-        Default,
-        Programmer_Game,
-    };
+    explicit ATG_Config(std::string_view tg_token);
+    constexpr ~ATG_Config() = default;
 
-public:
-    explicit AState_DB_Controller(const ADB_Config& db_cfg);
-    ~AState_DB_Controller() override = default;
+    [[nodiscard]] std::string_view Get_TG_Token() const;
 
-    void Create_Default_State(std::int64_t user_id);
-
-    void Set_State(std::int64_t user_id, EState_Type state_type);
-    EState_Type Get_State(std::int64_t user_id);
+private:
+    std::string_view TG_Token;
 };

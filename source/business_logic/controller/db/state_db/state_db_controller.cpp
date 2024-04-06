@@ -24,8 +24,8 @@
 #include "state_db_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AState_DB_Controller::AState_DB_Controller(const AConfig& cfg) :
-    ABase_DB_Controller{ cfg, "state_data" }
+AState_DB_Controller::AState_DB_Controller(const ADB_Config& db_cfg) :
+    ABase_DB_Controller{ db_cfg, "state_data" }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------

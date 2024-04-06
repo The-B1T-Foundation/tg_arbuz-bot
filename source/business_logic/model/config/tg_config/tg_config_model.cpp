@@ -21,45 +21,15 @@
 // SOFTWARE.
 
 
-#include "config_model.hpp"
+#include "tg_config_model.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AConfig::AConfig(std::string_view tg_token, std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password) :
-    TG_Token{ tg_token }, PG_Host{ pg_host }, PG_Port{ pg_port }, PG_DB_Name{ pg_db_name }, PG_User{ pg_user }, PG_Password{ pg_password }
+ATG_Config::ATG_Config(std::string_view tg_token) :
+    TG_Token{ tg_token }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_TG_Token() const
+std::string_view ATG_Config::Get_TG_Token() const
 {
     return TG_Token;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_PG_Host() const
-{
-    return PG_Host;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_PG_Port() const
-{
-    return PG_Port;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_PG_DB_Name() const
-{
-    return PG_DB_Name;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_PG_User() const
-{
-    return PG_User;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AConfig::Get_PG_Password() const
-{
-    return PG_Password;
 }
