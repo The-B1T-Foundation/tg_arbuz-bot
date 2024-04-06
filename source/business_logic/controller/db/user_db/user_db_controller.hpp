@@ -32,7 +32,7 @@
 class AUser_DB_Controller : public ABase_DB_Controller
 {
 public:
-    explicit AUser_DB_Controller(const AConfig& cfg);
+    explicit AUser_DB_Controller(const ADB_Config& db_cfg);
     ~AUser_DB_Controller() override = default;
 
     bool Is_User_Exists(std::int64_t user_id);

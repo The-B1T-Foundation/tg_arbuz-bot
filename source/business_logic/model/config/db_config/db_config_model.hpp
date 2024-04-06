@@ -21,46 +21,26 @@
 // SOFTWARE.
 
 
-#include "config_controller.hpp"
+#pragma once
 
-// ---------------------------------------------------------------------------------------------------------------------
-std::optional<AConfig> AConfig_Controller::Load_Config()
+#include <string>
+
+class ADB_Config
 {
-    const char* tg_token{ std::getenv("TG_TOKEN") };
-    if (!tg_token)
-    {
-        return std::nullopt;
-    }
+public:
+    explicit ADB_Config(std::string_view pg_host, std::string_view pg_port, std::string_view pg_db_name, std::string_view pg_user, std::string_view pg_password);
+    constexpr ~ADB_Config() = default;
 
-    const char* pg_host{ std::getenv("POSTGRES_HOST") };
-    if (!pg_host)
-    {
-        return std::nullopt;
-    }
+    [[nodiscard]] std::string_view Get_PG_Host() const;
+    [[nodiscard]] std::string_view Get_PG_Port() const;
+    [[nodiscard]] std::string_view Get_PG_DB_Name() const;
+    [[nodiscard]] std::string_view Get_PG_User() const;
+    [[nodiscard]] std::string_view Get_PG_Password() const;
 
-    const char* pg_port{ std::getenv("POSTGRES_PORT") };
-    if (!pg_port)
-    {
-        return std::nullopt;
-    }
-
-    const char* pg_db_name{ std::getenv("POSTGRES_DB") };
-    if (!pg_db_name)
-    {
-        return std::nullopt;
-    }
-
-    const char* pg_user{ std::getenv("POSTGRES_USER") };
-    if (!pg_user)
-    {
-        return std::nullopt;
-    }
-
-    const char* pg_password{ std::getenv("POSTGRES_PASSWORD") };
-    if (!pg_password)
-    {
-        return std::nullopt;
-    }
-
-    return AConfig{ tg_token, pg_host, pg_port, pg_db_name, pg_user, pg_password };
-}
+private:
+    std::string_view PG_Host;
+    std::string_view PG_Port;
+    std::string_view PG_DB_Name;
+    std::string_view PG_User;
+    std::string_view PG_Password;
+};

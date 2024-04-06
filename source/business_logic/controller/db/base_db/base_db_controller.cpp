@@ -24,7 +24,7 @@
 #include "base_db_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-ABase_DB_Controller::ABase_DB_Controller(const AConfig& cfg, std::string_view table_name) :
+ABase_DB_Controller::ABase_DB_Controller(const ADB_Config& db_cfg, std::string_view table_name) :
     Table_Name{ table_name },
-    Connection_String{ std::format("host={} port={} dbname={} user={} password={}", cfg.Get_PG_Host(), cfg.Get_PG_Port(), cfg.Get_PG_DB_Name(), cfg.Get_PG_User(), cfg.Get_PG_Password()) }
+    Connection_String{ std::format("host={} port={} dbname={} user={} password={}", db_cfg.Get_PG_Host(), db_cfg.Get_PG_Port(), db_cfg.Get_PG_DB_Name(), db_cfg.Get_PG_User(), db_cfg.Get_PG_Password()) }
 { }

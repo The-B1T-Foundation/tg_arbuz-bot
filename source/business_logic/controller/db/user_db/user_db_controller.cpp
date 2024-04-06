@@ -24,8 +24,8 @@
 #include "user_db_controller.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AUser_DB_Controller::AUser_DB_Controller(const AConfig& cfg) :
-    ABase_DB_Controller{ cfg, "user_data" }
+AUser_DB_Controller::AUser_DB_Controller(const ADB_Config& db_cfg) :
+    ABase_DB_Controller{ db_cfg, "user_data" }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------

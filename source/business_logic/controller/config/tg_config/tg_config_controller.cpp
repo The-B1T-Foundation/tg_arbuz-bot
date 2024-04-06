@@ -21,16 +21,16 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "tg_config_controller.hpp"
 
-#include <model/config/config_model.hpp>
-#include <optional>
-
-class AConfig_Controller
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<ATG_Config> ATG_Config_Controller::Load_Config()
 {
-public:
-    constexpr AConfig_Controller() = default;
-    constexpr ~AConfig_Controller() = default;
+    const char* tg_token{ std::getenv("TG_TOKEN") };
+    if (!tg_token)
+    {
+        return std::nullopt;
+    }
 
-    static std::optional<AConfig> Load_Config();
-};
+    return ATG_Config{ tg_token };
+}

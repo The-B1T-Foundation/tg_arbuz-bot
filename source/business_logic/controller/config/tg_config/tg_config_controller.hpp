@@ -23,26 +23,15 @@
 
 #pragma once
 
-#include <pqxx/pqxx>
+#include <optional>
 
-#include <controller/db/base_db/base_db_controller.hpp>
-#include <logger/logger_utility.hpp>
+#include <model/config/tg_config/tg_config_model.hpp>
 
-class AState_DB_Controller : public ABase_DB_Controller
+class ATG_Config_Controller
 {
 public:
-    enum EState_Type : std::uint8_t
-    {
-        Default,
-        Programmer_Game,
-    };
+    constexpr ATG_Config_Controller() = default;
+    constexpr ~ATG_Config_Controller() = default;
 
-public:
-    explicit AState_DB_Controller(const ADB_Config& db_cfg);
-    ~AState_DB_Controller() override = default;
-
-    void Create_Default_State(std::int64_t user_id);
-
-    void Set_State(std::int64_t user_id, EState_Type state_type);
-    EState_Type Get_State(std::int64_t user_id);
+    static std::optional<ATG_Config> Load_Config();
 };

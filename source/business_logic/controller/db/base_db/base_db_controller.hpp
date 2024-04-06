@@ -26,12 +26,12 @@
 #include <string>
 #include <format>
 
-#include <model/config/config_model.hpp>
+#include <model/config/db_config/db_config_model.hpp>
 
 class ABase_DB_Controller
 {
 public:
-    [[maybe_unused]] explicit ABase_DB_Controller(const AConfig& cfg, std::string_view table_name);
+    [[maybe_unused]] explicit ABase_DB_Controller(const ADB_Config& db_cfg, std::string_view table_name);
     virtual ~ABase_DB_Controller() = default;
 
 protected:
