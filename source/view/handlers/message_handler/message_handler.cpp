@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -31,8 +32,13 @@ AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user
 void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
 {
     Auto_Register(message->from->id, message->from->username, message->from->firstName);
-    AState_DB_Controller::EState_Type current_user_status{ State_DB_Controller.Get_State(message->from->id) };
+    if (auto current_user_state{ State_DB_Controller.Get_State(message->from->id) }; current_user_state != AState_DB_Controller::EState_Type::Default)
+    {
+        Handle_State(message->from->id, current_user_state, message->text);
+        return;
+    }
 
+    // --------------------------- Handle only commands ---------------------------
     if (message->text == SMessage_Commands::Start)
     {
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
@@ -43,15 +49,11 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     }
     else if (message->text == SMessage_Commands::Programmer_Game)
     {
-        // TODO:
-        TG_Bot.getApi().sendMessage(message->chat->id, "test expression");
+        AProgrammer_Game_Controller ctrl{};
+        auto expression{ ctrl.Generate_Expression() };
+
+        TG_Bot.getApi().sendMessage(message->chat->id, std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand));
         State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
-    }
-    else if (current_user_status == AState_DB_Controller::EState_Type::Programmer_Game)
-    {
-        // TODO:
-        TG_Bot.getApi().sendMessage(message->chat->id, "Programmer game status: ON");
-        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Default);
     }
 }
 
@@ -62,5 +64,19 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
     {
         User_DB_Controller.Create_User(AUser{ user_id, first_name.data(), username.data() });
         State_DB_Controller.Create_Default_State(user_id);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void AMessage_Handler::Handle_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message)
+{
+    switch (current_state)
+    {
+        case AState_DB_Controller::EState_Type::Programmer_Game:
+        {
+            // TODO: ...................................................................................
+            State_DB_Controller.Set_State(user_id, AState_DB_Controller::EState_Type::Default);
+            TG_Bot.getApi().sendMessage(user_id, std::format("Answer: {}", message));
+        }
     }
 }
