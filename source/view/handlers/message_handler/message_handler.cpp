@@ -24,8 +24,8 @@
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller) :
-        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller) :
+        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -54,6 +54,7 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
 
         TG_Bot.getApi().sendMessage(message->chat->id, std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand));
         State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
+        Task_DB_Controller.Set_Answer(message->from->id, ctrl.Get_Correct_Result());
     }
 }
 
@@ -64,6 +65,7 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
     {
         User_DB_Controller.Create_User(AUser{ user_id, first_name.data(), username.data() });
         State_DB_Controller.Create_Default_State(user_id);
+        Task_DB_Controller.Create_Default_Task(user_id);
     }
 }
 
@@ -74,9 +76,17 @@ void AMessage_Handler::Handle_State(std::int64_t user_id, AState_DB_Controller::
     {
         case AState_DB_Controller::EState_Type::Programmer_Game:
         {
-            // TODO: ...................................................................................
+            if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
+            {
+                TG_Bot.getApi().sendMessage(user_id, std::format("Incorrect answer, correct answer -> {}", answer));
+            }
+            else
+            {
+                TG_Bot.getApi().sendMessage(user_id, "Correct Answer");
+            }
+
             State_DB_Controller.Set_State(user_id, AState_DB_Controller::EState_Type::Default);
-            TG_Bot.getApi().sendMessage(user_id, std::format("Answer: {}", message));
+            break;
         }
     }
 }

@@ -46,6 +46,7 @@ set(CONTROLLER_HEADERS
         controller/db/base_db/base_db_controller.hpp
         controller/config/db_config/db_config_controller.hpp
         controller/config/tg_config/tg_config_controller.hpp
+        controller/db/task_db/task_db_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
@@ -55,6 +56,7 @@ set(CONTROLLER_SOURCES
         controller/db/base_db/base_db_controller.cpp
         controller/config/db_config/db_config_controller.cpp
         controller/config/tg_config/tg_config_controller.cpp
+        controller/db/task_db/task_db_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC
