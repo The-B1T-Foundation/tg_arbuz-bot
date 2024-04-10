@@ -26,7 +26,11 @@
 namespace programmer_game
 {
     // -----------------------------------------------------------------------------------------------------------------
-    SExpression::SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation) :
-            First_Operand{ std::move(first_operand) }, Second_Operand{ std::move(second_operand) }, Operation{ std::move(operation) }
-    { }
+    SExpression::SExpression(std::string_view first_operand, std::string_view second_operand, std::string_view operation, std::string_view result)
+    {
+        std::memcpy(First_Operand, first_operand.data(), SIZE);
+        std::memcpy(Second_Operand, second_operand.data(), SIZE);
+        std::memcpy(Operation, operation.data(), SIZE);
+        std::memcpy(Result, result.data(), SIZE);
+    }
 }

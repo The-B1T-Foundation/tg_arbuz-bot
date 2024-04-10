@@ -24,18 +24,22 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 
 namespace programmer_game
 {
     struct SExpression
     {
     public:
-        explicit SExpression(std::string&& first_operand, std::string&& second_operand, std::string&& operation);
+        explicit SExpression(std::string_view first_operand, std::string_view second_operand, std::string_view operation, std::string_view result);
         constexpr ~SExpression() = default;
 
     public:
-        std::string First_Operand;
-        std::string Second_Operand;
-        std::string Operation;
+        constexpr static std::size_t SIZE{ 9 };
+
+        char First_Operand[SIZE];
+        char Second_Operand[SIZE];
+        char Operation[SIZE];
+        char Result[SIZE];
     };
 }

@@ -35,11 +35,5 @@ public:
     constexpr AProgrammer_Game_Controller() = default;
     constexpr ~AProgrammer_Game_Controller() = default;
 
-    programmer_game::SExpression Generate_Expression();
-    [[nodiscard]] bool Check_Solution(std::string_view solution) const;
-
-    [[nodiscard]] std::string_view Get_Correct_Result() const;
-
-private:
-    std::string Result_Expression;
+    static programmer_game::SExpression Generate_Expression();
 };
