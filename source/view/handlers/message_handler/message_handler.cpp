@@ -49,12 +49,11 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     }
     else if (message->text == SMessage_Commands::Programmer_Game)
     {
-        AProgrammer_Game_Controller ctrl{};
-        auto expression{ ctrl.Generate_Expression() };
-
+        auto expression{ AProgrammer_Game_Controller::Generate_Expression() };
         TG_Bot.getApi().sendMessage(message->chat->id, std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand));
+
         State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
-        Task_DB_Controller.Set_Answer(message->from->id, ctrl.Get_Correct_Result());
+        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
     }
 }
 
@@ -85,8 +84,9 @@ void AMessage_Handler::Handle_State(std::int64_t user_id, AState_DB_Controller::
                 TG_Bot.getApi().sendMessage(user_id, "Correct Answer");
             }
 
-            State_DB_Controller.Set_State(user_id, AState_DB_Controller::EState_Type::Default);
             break;
         }
     }
+
+    State_DB_Controller.Set_State(user_id, AState_DB_Controller::EState_Type::Default);
 }

@@ -38,29 +38,10 @@ programmer_game::SExpression AProgrammer_Game_Controller::Generate_Expression()
 
     if (distribution(gen) & 1)
     {
-        Result_Expression = bitset(first_operand | second_operand).to_string();
-        return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "|" };
+        auto result{ bitset(first_operand | second_operand).to_string() };
+        return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "|", result };
     }
 
-    Result_Expression = bitset(first_operand & second_operand).to_string();
-    return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "&" };
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-bool AProgrammer_Game_Controller::Check_Solution(std::string_view solution) const
-{
-    if (solution.size() != Result_Expression.size())
-    {
-        return false;
-    }
-
-    // TODO: .................................................................................................
-    return (Result_Expression == solution);
-    // return common_nasm_tools::Compare_String(Result_Expression.c_str(), solution.c_str(), solution.size());
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-std::string_view AProgrammer_Game_Controller::Get_Correct_Result() const
-{
-    return Result_Expression;
+    auto result{ bitset(first_operand & second_operand).to_string() };
+    return SExpression{ bitset(first_operand).to_string(), bitset(second_operand).to_string(), "&", result };
 }
