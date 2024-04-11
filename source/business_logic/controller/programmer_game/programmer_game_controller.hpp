@@ -36,4 +36,5 @@ public:
     constexpr ~AProgrammer_Game_Controller() = default;
 
     static programmer_game::SExpression Generate_Expression();
+    constexpr static std::int64_t Score{ 3 };
 };

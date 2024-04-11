@@ -28,6 +28,8 @@
 #include <controller/db/user_db/user_db_controller.hpp>
 #include <controller/db/state_db/state_db_controller.hpp>
 #include <controller/db/task_db/task_db_controller.hpp>
+#include <controller/db/stats_db/stats_db_controller.hpp>
+
 #include <model/user/user_model.hpp>
 #include <message_commands.hpp>
 #include <message_reply.hpp>
@@ -36,7 +38,7 @@
 class AMessage_Handler
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller);
+    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller);
     constexpr ~AMessage_Handler() = default;
 
     void Handle_All_Messages(const TgBot::Message::Ptr& message);
@@ -51,4 +53,5 @@ private:
     AUser_DB_Controller& User_DB_Controller;
     AState_DB_Controller& State_DB_Controller;
     ATask_DB_Controller& Task_DB_Controller;
+    AStats_DB_Controller& Stats_DB_Controller;
 };
