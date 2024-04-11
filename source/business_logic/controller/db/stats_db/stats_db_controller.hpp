@@ -23,18 +23,19 @@
 
 #pragma once
 
-#include <random>
-#include <cstdint>
-#include <bitset>
+#include <pqxx/pqxx>
 
-#include <model/programmer_game/programmer_game_expression_model.hpp>
+#include <controller/db/base_db/base_db_controller.hpp>
+#include <logger/logger_utility.hpp>
 
-class AProgrammer_Game_Controller
+class AStats_DB_Controller : public ABase_DB_Controller
 {
 public:
-    constexpr AProgrammer_Game_Controller() = default;
-    constexpr ~AProgrammer_Game_Controller() = default;
+    explicit AStats_DB_Controller(const ADB_Config& db_config);
+    ~AStats_DB_Controller() override = default;
 
-    static programmer_game::SExpression Generate_Expression();
-    constexpr static std::int64_t Score{ 3 };
+    void Create_Default_Stats(std::int64_t user_id);
+
+    void Set_Score(std::int64_t user_id, std::int64_t score);
+    std::int64_t Get_Score(std::int64_t user_id);
 };
