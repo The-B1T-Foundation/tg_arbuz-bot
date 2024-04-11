@@ -53,8 +53,9 @@ int main()
     AUser_DB_Controller user_db_controller{ *db_cfg };
     AState_DB_Controller state_db_controller{ *db_cfg };
     ATask_DB_Controller task_db_controller{ *db_cfg };
+    AStats_DB_Controller stats_db_controller{ *db_cfg };
 
-    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller };
+    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller };
     tg_bot.getEvents().onAnyMessage([&message_handler](TgBot::Message::Ptr message) -> void
     {
         message_handler.Handle_All_Messages(message);
