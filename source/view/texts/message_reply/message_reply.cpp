@@ -30,9 +30,9 @@ std::string AMessage_Reply::Get_Hello_Msg(std::string_view username)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Profile_Msg(std::int64_t user_id)
+std::string AMessage_Reply::Get_Profile_Msg(std::int64_t user_id, std::string_view username, std::string_view first_name, std::int64_t score)
 {
-    return "Тестові данні";
+    return std::format("Profile info:\nID: {}\nUsername: {}\nName: {}\nScore: {}", user_id, username, first_name, score);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
