@@ -37,6 +37,6 @@ public:
     constexpr ~AMessage_Reply() = default;
 
     static std::string Get_Hello_Msg(std::string_view username);
-    static std::string Get_Profile_Msg(std::int64_t user_id);
+    static std::string Get_Profile_Msg(std::int64_t user_id, std::string_view username, std::string_view first_name, std::int64_t score);
     static std::string Get_Programmer_Game_Msg(programmer_game::SExpression& expression);
 };

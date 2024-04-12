@@ -45,7 +45,10 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     }
     else if (message->text == SMessage_Commands::Profile)
     {
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(message->from->id));
+        auto user{ User_DB_Controller.Get_User(message->from->id) };
+        auto score{ Stats_DB_Controller.Get_Score(message->from->id) };
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(message->from->id, user.Get_User_Username(), user.Get_User_First_Name(), score));
     }
     else if (message->text == SMessage_Commands::Programmer_Game)
     {
