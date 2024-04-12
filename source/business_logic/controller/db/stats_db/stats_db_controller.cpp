@@ -31,54 +31,18 @@ AStats_DB_Controller::AStats_DB_Controller(const ADB_Config& db_config) :
 // ---------------------------------------------------------------------------------------------------------------------
 void AStats_DB_Controller::Create_Default_Stats(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(INSERT INTO {} (id, score) VALUES ('{}', '{}'))", Table_Name, user_id, 0));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(INSERT INTO {} (id, score) VALUES ('{}', '{}'))", Table_Name, user_id, 0));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void AStats_DB_Controller::Set_Score(std::int64_t user_id, std::int64_t score)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(UPDATE {} SET score = '{}' WHERE id = '{}')", Table_Name, score, user_id));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(UPDATE {} SET score = '{}' WHERE id = '{}')", Table_Name, score, user_id));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::int64_t AStats_DB_Controller::Get_Score(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        pqxx::result response{ worker.exec(std::format(R"(SELECT score FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-        worker.commit();
-
-        return response[0][0].as<std::int64_t>();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
-
-    return 0;
+    auto response{ Exec_Query(std::format(R"(SELECT score FROM {} WHERE id = '{}')", Table_Name, user_id)) };
+    return (*response)[0][0].as<std::int64_t>();
 }

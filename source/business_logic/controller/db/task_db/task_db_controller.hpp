@@ -23,10 +23,7 @@
 
 #pragma once
 
-#include <pqxx/pqxx>
-
 #include <controller/db/base_db/base_db_controller.hpp>
-#include <logger/logger_utility.hpp>
 
 class ATask_DB_Controller : public ABase_DB_Controller
 {
@@ -37,5 +34,5 @@ public:
     void Create_Default_Task(std::int64_t user_id);
 
     void Set_Answer(std::int64_t user_id, std::string_view answer);
-    [[nodiscard]] std::string Get_Answer(std::int64_t user_id) const;
+    std::string Get_Answer(std::int64_t user_id);
 };

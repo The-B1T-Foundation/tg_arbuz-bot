@@ -25,14 +25,22 @@
 
 #include <string>
 #include <format>
+#include <optional>
+
+#include <pqxx/pqxx>
 
 #include <model/config/db_config/db_config_model.hpp>
+
+#include <logger/logger_utility.hpp>
 
 class ABase_DB_Controller
 {
 public:
     [[maybe_unused]] explicit ABase_DB_Controller(const ADB_Config& db_cfg, std::string_view table_name);
     virtual ~ABase_DB_Controller() = default;
+
+protected:
+    std::optional<pqxx::result> Exec_Query(std::string_view query);
 
 protected:
     std::string_view Table_Name;
