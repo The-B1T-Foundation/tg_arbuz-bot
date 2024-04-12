@@ -28,3 +28,20 @@ ABase_DB_Controller::ABase_DB_Controller(const ADB_Config& db_cfg, std::string_v
     Table_Name{ table_name },
     Connection_String{ std::format("host={} port={} dbname={} user={} password={}", db_cfg.Get_PG_Host(), db_cfg.Get_PG_Port(), db_cfg.Get_PG_DB_Name(), db_cfg.Get_PG_User(), db_cfg.Get_PG_Password()) }
 { }
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<pqxx::result> ABase_DB_Controller::Exec_Query(std::string_view query)
+{
+    if (pqxx::connection connection{ Connection_String.c_str() }; connection.is_open())
+    {
+        pqxx::work worker{ connection };
+
+        pqxx::result response{ worker.exec(query) };
+        worker.commit();
+
+        return response;
+    }
+
+    ALogger_Utility::Error("Something went wrong, critical error, connection is not open !!!\n");
+    return std::nullopt;
+}

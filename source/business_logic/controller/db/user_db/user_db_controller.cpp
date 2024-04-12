@@ -31,75 +31,25 @@ AUser_DB_Controller::AUser_DB_Controller(const ADB_Config& db_cfg) :
 // ---------------------------------------------------------------------------------------------------------------------
 bool AUser_DB_Controller::Is_User_Exists(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        pqxx::result response{ worker.exec(std::format(R"(SELECT COUNT(*) FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-        worker.commit();
-
-        return response[0][0].as<std::int64_t>() != 0;
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
-
-    return false;
+    auto response{ Exec_Query(std::format(R"(SELECT COUNT(*) FROM {} WHERE id = '{}')", Table_Name, user_id)) };
+    return (*response)[0][0].as<std::int64_t>() != 0;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void AUser_DB_Controller::Create_User(const AUser& user)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(INSERT INTO {} (id, username, first_name) VALUES ('{}', '{}', '{}'))", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(INSERT INTO {} (id, username, first_name) VALUES ('{}', '{}', '{}'))", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 AUser AUser_DB_Controller::Get_User(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        pqxx::result response{ worker.exec(std::format(R"(SELECT id, first_name, username FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-        worker.commit();
-
-        return AUser{ response[0][0].as<std::int64_t>(), response[0][1].as<std::string>(), response[0][2].as<std::string>() };
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
-
-    return AUser{};
+    auto response{ Exec_Query(std::format(R"(SELECT id, first_name, username FROM {} WHERE id = '{}')", Table_Name, user_id)) };
+    return AUser{ (*response)[0][0].as<std::int64_t>(), (*response)[0][1].as<std::string>(), (*response)[0][2].as<std::string>() };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void AUser_DB_Controller::Update_User_Data(const AUser& user)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(UPDATE {} SET id = '{}', username = '{}', first_name = '{}')", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(UPDATE {} SET id = '{}', username = '{}', first_name = '{}')", Table_Name, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name()));
 }

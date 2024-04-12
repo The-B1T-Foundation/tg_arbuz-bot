@@ -31,54 +31,18 @@ ATask_DB_Controller::ATask_DB_Controller(const ADB_Config& db_cfg) :
 // ---------------------------------------------------------------------------------------------------------------------
 void ATask_DB_Controller::Create_Default_Task(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(INSERT INTO {} (id, answer) VALUES ('{}', '{}'))", Table_Name, user_id, ""));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(INSERT INTO {} (id, answer) VALUES ('{}', '{}'))", Table_Name, user_id, ""));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void ATask_DB_Controller::Set_Answer(std::int64_t user_id, std::string_view answer)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        worker.exec(std::format(R"(UPDATE {} SET answer = '{}' WHERE id = '{}')", Table_Name, answer, user_id));
-        worker.commit();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
+    Exec_Query(std::format(R"(UPDATE {} SET answer = '{}' WHERE id = '{}')", Table_Name, answer, user_id));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string ATask_DB_Controller::Get_Answer(std::int64_t user_id) const
+std::string ATask_DB_Controller::Get_Answer(std::int64_t user_id)
 {
-    try
-    {
-        pqxx::connection connection{ Connection_String.c_str() };
-        pqxx::work worker{ connection };
-
-        pqxx::result response{ worker.exec(std::format(R"(SELECT answer FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-        worker.commit();
-
-        return response[0][0].as<std::string>();
-    }
-    catch (const std::exception& ex)
-    {
-        ALogger_Utility::Error(ex.what());
-    }
-
-    return "";
+    auto response{ Exec_Query(std::format(R"(SELECT answer FROM {} WHERE id = '{}')", Table_Name, user_id)) };
+    return (*response)[0][0].as<std::string>();
 }
