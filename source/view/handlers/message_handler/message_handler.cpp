@@ -34,30 +34,11 @@ void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
     Auto_Register(message->from->id, message->from->username, message->from->firstName);
     if (auto current_user_state{ State_DB_Controller.Get_State(message->from->id) }; current_user_state != AState_DB_Controller::EState_Type::Default)
     {
-        Handle_State(message->from->id, current_user_state, message->text);
+        Handle_Game_State(message->from->id, current_user_state, message->text);
         return;
     }
 
-    // --------------------------- Handle only commands ---------------------------
-    if (message->text == SMessage_Commands::Start)
-    {
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
-    }
-    else if (message->text == SMessage_Commands::Profile)
-    {
-        auto user{ User_DB_Controller.Get_User(message->from->id) };
-        auto score{ Stats_DB_Controller.Get_Score(message->from->id) };
-
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(message->from->id, user.Get_User_Username(), user.Get_User_First_Name(), score));
-    }
-    else if (message->text == SMessage_Commands::Programmer_Game)
-    {
-        auto expression{ AProgrammer_Game_Controller::Generate_Expression() };
-        TG_Bot.getApi().sendMessage(message->chat->id, std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand));
-
-        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
-        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
-    }
+    Handle_Default_Commands(message);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -73,7 +54,49 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Handle_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message)
+void AMessage_Handler::Handle_Default_Commands(const TgBot::Message::Ptr& message)
+{
+    if (message->text == SMessage_Commands::Start)
+    {
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
+    }
+    else if (message->text == SMessage_Commands::Profile)
+    {
+        auto user{ User_DB_Controller.Get_User(message->from->id) };
+        auto score{ Stats_DB_Controller.Get_Score(message->from->id) };
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(user, score));
+    }
+    else
+    {
+        Handle_Game_Commands(message);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void AMessage_Handler::Handle_Game_Commands(const TgBot::Message::Ptr& message)
+{
+    auto current_time{ static_cast<std::int64_t>(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()) };
+    if (auto difference{ current_time - Task_DB_Controller.Get_Time_Stamp(message->from->id) }; difference < 10) // 10 - waiting time
+    {
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Waiting_Time_Msg(10 - difference));
+        return;
+    }
+
+    if (message->text == SMessage_Commands::Programmer_Game)
+    {
+        auto expression{ AProgrammer_Game_Controller::Generate_Expression() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Programmer_Game_Msg(expression));
+
+        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
+        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
+    }
+
+    Task_DB_Controller.Set_Time_Stamp(message->from->id, current_time);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void AMessage_Handler::Handle_Game_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message)
 {
     auto current_score{ Stats_DB_Controller.Get_Score(user_id) };
 
@@ -84,12 +107,12 @@ void AMessage_Handler::Handle_State(std::int64_t user_id, AState_DB_Controller::
             if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
             {
                 Stats_DB_Controller.Set_Score(user_id, (current_score -= AProgrammer_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, std::format("Incorrect answer, correct answer -> {}", answer));
+                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Incorrect_Answer_Msg(AProgrammer_Game_Controller::Score, answer));
             }
             else
             {
                 Stats_DB_Controller.Set_Score(user_id, (current_score += AProgrammer_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, "Correct Answer");
+                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Correct_Answer_Msg(AProgrammer_Game_Controller::Score));
             }
 
             break;
