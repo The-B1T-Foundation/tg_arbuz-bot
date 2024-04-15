@@ -45,7 +45,9 @@ public:
 
 private:
     [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
-    [[clang::always_inline]] __inline__ void Handle_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message);
+    [[clang::always_inline]] __inline__ void Handle_Default_Commands(const TgBot::Message::Ptr& message);
+    [[clang::always_inline]] __inline__ void Handle_Game_Commands(const TgBot::Message::Ptr& message);
+    [[clang::always_inline]] __inline__ void Handle_Game_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message);
 
 private:
     TgBot::Bot& TG_Bot;

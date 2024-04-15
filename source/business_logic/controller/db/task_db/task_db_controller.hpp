@@ -35,4 +35,7 @@ public:
 
     void Set_Answer(std::int64_t user_id, std::string_view answer);
     std::string Get_Answer(std::int64_t user_id);
+
+    void Set_Time_Stamp(std::int64_t user_id, std::int64_t time_stamp);
+    std::int64_t Get_Time_Stamp(std::int64_t user_id);
 };

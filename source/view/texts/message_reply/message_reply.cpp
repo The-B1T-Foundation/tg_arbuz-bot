@@ -30,13 +30,31 @@ std::string AMessage_Reply::Get_Hello_Msg(std::string_view username)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Profile_Msg(std::int64_t user_id, std::string_view username, std::string_view first_name, std::int64_t score)
+std::string AMessage_Reply::Get_Profile_Msg(const AUser& user, std::int64_t score)
 {
-    return std::format("Profile info:\nID: {}\nUsername: {}\nName: {}\nScore: {}", user_id, username, first_name, score);
+    return std::format("Profile info:\nID: {}\nUsername: {}\nName: {}\nScore: {}", user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name(), score);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Programmer_Game_Msg(programmer_game::SExpression& expression)
 {
     return std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Waiting_Time_Msg(std::int64_t time)
+{
+    return std::format("Please wait {} min", time);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Correct_Answer_Msg(std::int64_t score)
+{
+    return std::format("Correct answer: +{}", score);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer)
+{
+    return std::format("Incorrect answer: -{}\nCorrect answer: {}", score, correct_answer);
 }
