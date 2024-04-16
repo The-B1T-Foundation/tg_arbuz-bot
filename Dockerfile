@@ -21,8 +21,7 @@
 # SOFTWARE.
 
 
-# TODO: FIX building
-FROM silkeh/clang:latest
+FROM gcc:latest
 
 WORKDIR /app
 
@@ -45,7 +44,7 @@ RUN apt-get -y install g++ make binutils cmake libboost-system-dev libssl-dev zl
 RUN git clone https://github.com/reo7sp/tgbot-cpp
 WORKDIR /app/tgbot-cpp
 RUN cmake .
-RUN make -j4
+RUN make
 RUN make install
 WORKDIR /app
 
@@ -59,13 +58,7 @@ WORKDIR /app
 
 # build
 RUN mkdir build
-RUN cd build && cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ .. && cmake --build .
-
-# check versions
-RUN clang --version
-RUN clang++ --version
-RUN cmake --version
-RUN nasm --version
+RUN cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ .. && cmake --build .
 
 WORKDIR /app/build/source/view
 CMD ["./tg_arbuz-bot"]
