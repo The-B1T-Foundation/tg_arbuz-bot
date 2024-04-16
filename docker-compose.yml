@@ -22,23 +22,14 @@
 
 
 version: '3'
+
 services:
   app:
     build:
       context: .
       dockerfile: ./Dockerfile
-    depends_on:
-      - postgres
     ports:
       - "8080:8080"
     restart: unless-stopped
     image: tg_arbuz-bot:latest
     env_file: ./cfg/.env
-
-  postgres:
-    container_name: postgres_container
-    image: postgres:latest
-    restart: unless-stopped
-    env_file: ./cfg/.env
-    ports:
-      - "5431:5431"
