@@ -63,12 +63,10 @@ int main()
 
     try
     {
-        ALogger_Utility::Message(std::string{ "Bot username: " } + tg_bot.getApi().getMe()->username);
         TgBot::TgLongPoll long_poll{ tg_bot };
 
         while(true)
         {
-            ALogger_Utility::Message("Long poll started");
             long_poll.start();
         }
     }

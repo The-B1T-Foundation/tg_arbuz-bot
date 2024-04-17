@@ -44,5 +44,5 @@ void AStats_DB_Controller::Set_Score(std::int64_t user_id, std::int64_t score)
 std::int64_t AStats_DB_Controller::Get_Score(std::int64_t user_id)
 {
     auto response{ Exec_Query(std::format(R"(SELECT score FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-    return (*response)[0][0].as<std::int64_t>();
+    return response[0][0].as<std::int64_t>();
 }

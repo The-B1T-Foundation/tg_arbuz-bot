@@ -40,9 +40,9 @@ public:
     virtual ~ABase_DB_Controller() = default;
 
 protected:
-    std::optional<pqxx::result> Exec_Query(std::string_view query);
+    pqxx::result Exec_Query(std::string_view query);
 
 protected:
     std::string_view Table_Name;
-    std::string Connection_String;
+    pqxx::connection Connection;
 };

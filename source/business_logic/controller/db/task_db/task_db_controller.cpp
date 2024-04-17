@@ -44,7 +44,7 @@ void ATask_DB_Controller::Set_Answer(std::int64_t user_id, std::string_view answ
 std::string ATask_DB_Controller::Get_Answer(std::int64_t user_id)
 {
     auto response{ Exec_Query(std::format(R"(SELECT answer FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-    return (*response)[0][0].as<std::string>();
+    return response[0][0].as<std::string>();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -57,5 +57,5 @@ void ATask_DB_Controller::Set_Time_Stamp(std::int64_t user_id, std::int64_t time
 std::int64_t ATask_DB_Controller::Get_Time_Stamp(std::int64_t user_id)
 {
     auto response{ Exec_Query(std::format(R"(SELECT time_stamp FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-    return (*response)[0][0].as<std::int64_t>();
+    return response[0][0].as<std::int64_t>();
 }
