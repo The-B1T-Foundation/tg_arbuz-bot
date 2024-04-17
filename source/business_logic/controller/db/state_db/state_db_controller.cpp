@@ -44,5 +44,5 @@ void AState_DB_Controller::Set_State(std::int64_t user_id, EState_Type state_typ
 AState_DB_Controller::EState_Type AState_DB_Controller::Get_State(std::int64_t user_id)
 {
     auto response{ Exec_Query(std::format(R"(SELECT state FROM {} WHERE id = '{}')", Table_Name, user_id)) };
-    return static_cast<EState_Type>((*response)[0][0].as<std::uint32_t>());
+    return static_cast<EState_Type>(response[0][0].as<std::uint32_t>());
 }
