@@ -30,6 +30,7 @@ set(MODEL_HEADERS
         model/programmer_game/programmer_game_expression_model.hpp
         model/config/db_config/db_config_model.hpp
         model/config/tg_config/tg_config_model.hpp
+        model/math_problem_game/math_problem_game_expression_model.hpp
 )
 
 set(MODEL_SOURCES
@@ -37,6 +38,7 @@ set(MODEL_SOURCES
         model/programmer_game/programmer_game_expression_model.cpp
         model/config/db_config/db_config_model.cpp
         model/config/tg_config/tg_config_model.cpp
+        model/math_problem_game/math_problem_game_expression_model.cpp
 )
 
 set(CONTROLLER_HEADERS
@@ -48,6 +50,7 @@ set(CONTROLLER_HEADERS
         controller/config/tg_config/tg_config_controller.hpp
         controller/db/task_db/task_db_controller.hpp
         controller/db/stats_db/stats_db_controller.hpp
+        controller/math_problem_game/math_problem_game_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
@@ -59,6 +62,7 @@ set(CONTROLLER_SOURCES
         controller/config/tg_config/tg_config_controller.cpp
         controller/db/task_db/task_db_controller.cpp
         controller/db/stats_db/stats_db_controller.cpp
+        controller/math_problem_game/math_problem_game_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC
