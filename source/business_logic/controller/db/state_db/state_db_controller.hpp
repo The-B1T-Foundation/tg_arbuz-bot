@@ -32,6 +32,7 @@ public:
     {
         Default,
         Programmer_Game,
+        Math_Game,
     };
 
 public:
