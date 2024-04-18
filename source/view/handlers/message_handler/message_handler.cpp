@@ -91,6 +91,14 @@ void AMessage_Handler::Handle_Game_Commands(const TgBot::Message::Ptr& message)
         State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
         Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
     }
+    else if (message->text == SMessage_Commands::Math_Game)
+    {
+        auto expression{ AMath_Problem_Game_Controller::Generate_Problem() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Math_Game_Msg(expression));
+
+        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Math_Game);
+        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
+    }
 
     Task_DB_Controller.Set_Time_Stamp(message->from->id, current_time);
 }
@@ -106,13 +114,28 @@ void AMessage_Handler::Handle_Game_State(std::int64_t user_id, AState_DB_Control
         {
             if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
             {
-                Stats_DB_Controller.Set_Score(user_id, (current_score -= AProgrammer_Game_Controller::Score));
+                Stats_DB_Controller.Set_Score(user_id, (current_score - AProgrammer_Game_Controller::Score));
                 TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Incorrect_Answer_Msg(AProgrammer_Game_Controller::Score, answer));
             }
             else
             {
-                Stats_DB_Controller.Set_Score(user_id, (current_score += AProgrammer_Game_Controller::Score));
+                Stats_DB_Controller.Set_Score(user_id, (current_score + AProgrammer_Game_Controller::Score));
                 TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Correct_Answer_Msg(AProgrammer_Game_Controller::Score));
+            }
+
+            break;
+        }
+        case AState_DB_Controller::EState_Type::Math_Game:
+        {
+            if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
+            {
+                Stats_DB_Controller.Set_Score(user_id, (current_score - AMath_Problem_Game_Controller::Score));
+                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Incorrect_Answer_Msg(AMath_Problem_Game_Controller::Score, answer));
+            }
+            else
+            {
+                Stats_DB_Controller.Set_Score(user_id, (current_score + AMath_Problem_Game_Controller::Score));
+                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Correct_Answer_Msg(AMath_Problem_Game_Controller::Score));
             }
 
             break;

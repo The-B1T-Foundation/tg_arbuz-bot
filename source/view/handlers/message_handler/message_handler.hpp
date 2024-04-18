@@ -30,10 +30,14 @@
 #include <controller/db/task_db/task_db_controller.hpp>
 #include <controller/db/stats_db/stats_db_controller.hpp>
 
+#include <controller/programmer_game/programmer_game_controller.hpp>
+#include <controller/math_problem_game/math_problem_game_controller.hpp>
+
 #include <model/user/user_model.hpp>
+
 #include <message_commands.hpp>
 #include <message_reply.hpp>
-#include <controller/programmer_game/programmer_game_controller.hpp>
+
 
 class AMessage_Handler
 {
