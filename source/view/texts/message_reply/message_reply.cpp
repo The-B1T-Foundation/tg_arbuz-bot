@@ -36,9 +36,15 @@ std::string AMessage_Reply::Get_Profile_Msg(const AUser& user, std::int64_t scor
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Programmer_Game_Msg(programmer_game::SExpression& expression)
+std::string AMessage_Reply::Get_Programmer_Game_Msg(const programmer_game::SExpression& expression)
 {
     return std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Math_Game_Msg(const math_game::SMath_Expression& expression)
+{
+    return std::format("Try to solve: {}", expression.Expression);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
