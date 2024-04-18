@@ -28,7 +28,9 @@
 #include <format>
 
 #include <emoji.hpp>
+
 #include <model/programmer_game/programmer_game_expression_model.hpp>
+#include <model/math_problem_game/math_problem_game_expression_model.hpp>
 #include <model/user/user_model.hpp>
 
 class AMessage_Reply
@@ -39,7 +41,8 @@ public:
 
     static std::string Get_Hello_Msg(std::string_view username);
     static std::string Get_Profile_Msg(const AUser& user, std::int64_t score);
-    static std::string Get_Programmer_Game_Msg(programmer_game::SExpression& expression);
+    static std::string Get_Programmer_Game_Msg(const programmer_game::SExpression& expression);
+    static std::string Get_Math_Game_Msg(const math_game::SMath_Expression& expression);
     static std::string Get_Waiting_Time_Msg(std::int64_t time);
     static std::string Get_Correct_Answer_Msg(std::int64_t score);
     static std::string Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer);

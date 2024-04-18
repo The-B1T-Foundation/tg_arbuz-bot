@@ -23,12 +23,17 @@
 
 #pragma once
 
-#include <string>
+#include <random>
+#include <format>
 
-struct SMessage_Commands
+#include <model/math_problem_game/math_problem_game_expression_model.hpp>
+
+class AMath_Problem_Game_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
+public:
+    constexpr AMath_Problem_Game_Controller() = default;
+    constexpr ~AMath_Problem_Game_Controller() = default;
+
+    static math_game::SMath_Expression Generate_Problem();
+    constexpr static std::int64_t Score{ 5 };
 };

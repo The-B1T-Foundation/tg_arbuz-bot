@@ -21,14 +21,14 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "math_problem_game_expression_model.hpp"
 
-#include <string>
-
-struct SMessage_Commands
+namespace math_game
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-};
+    // -----------------------------------------------------------------------------------------------------------------
+    SMath_Expression::SMath_Expression(std::string_view expression, std::string_view result)
+    {
+        std::memcpy(Expression, expression.data(), expression.size());
+        std::memcpy(Result, result.data(), expression.size());
+    }
+}

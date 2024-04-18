@@ -24,11 +24,19 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 
-struct SMessage_Commands
+namespace math_game
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-};
+    struct SMath_Expression
+    {
+    public:
+        explicit SMath_Expression(std::string_view expression, std::string_view result);
+        constexpr ~SMath_Expression() = default;
+
+    public:
+        constexpr static std::size_t SIZE{ 18 };
+        char Result[SIZE]{ };
+        char Expression[SIZE]{ };
+    };
+}
