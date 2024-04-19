@@ -29,16 +29,87 @@ AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Handle_All_Messages(const TgBot::Message::Ptr& message)
+void AMessage_Handler::Init()
 {
-    Auto_Register(message->from->id, message->from->username, message->from->firstName);
-    if (auto current_user_state{ State_DB_Controller.Get_State(message->from->id) }; current_user_state != AState_DB_Controller::EState_Type::Default)
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Start.data(), [this](TgBot::Message::Ptr message) -> void
     {
-        Handle_Game_State(message->from->id, current_user_state, message->text);
-        return;
-    }
+        Auto_Register(message->from->id, message->from->username, message->from->firstName);
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Profile.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        Auto_Register(message->from->id, message->from->username, message->from->firstName);
 
-    Handle_Default_Commands(message);
+        auto user{ User_DB_Controller.Get_User(message->from->id) };
+        auto score{ Stats_DB_Controller.Get_Score(message->from->id) };
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(user, score));
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Programmer_Game.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        Auto_Register(message->from->id, message->from->username, message->from->firstName);
+
+        if (Can_Use_Command(message, 7))
+        {
+            auto expression{ AProgrammer_Game_Controller::Generate_Expression() };
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Programmer_Game_Msg(expression));
+
+            State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
+            Task_DB_Controller.Set_Answer(message->from->id, expression.Result);return;
+        }
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Math_Game.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        Auto_Register(message->from->id, message->from->username, message->from->firstName);
+
+        if (Can_Use_Command(message, 7))
+        {
+            auto expression{ AMath_Problem_Game_Controller::Generate_Problem() };
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Math_Game_Msg(expression));
+
+            State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Math_Game);
+            Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
+        }
+    });
+    // TODO: .....................................................................................................................
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Answer.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (auto current_user_state{ State_DB_Controller.Get_State(message->from->id) }; current_user_state != AState_DB_Controller::EState_Type::Default)
+        {
+            std::int64_t score{};
+            auto current_score{ Stats_DB_Controller.Get_Score(message->from->id) };
+
+            switch (current_user_state)
+            {
+                case AState_DB_Controller::EState_Type::Programmer_Game:
+                {
+                    score = AProgrammer_Game_Controller::Score;
+                    break;
+                }
+                case AState_DB_Controller::EState_Type::Math_Game:
+                {
+                    score = AMath_Problem_Game_Controller::Score;
+                    break;
+                }
+            }
+
+            auto answer{ Task_DB_Controller.Get_Answer(message->from->id) };
+            std::string_view user_answer{ message->text.begin() + 8, message->text.end() };
+
+            if (answer != user_answer)
+            {
+                Stats_DB_Controller.Set_Score(message->from->id, (current_score - score));
+                TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Incorrect_Answer_Msg(score, answer));
+            }
+            else
+            {
+                Stats_DB_Controller.Set_Score(message->from->id, (current_score + score));
+                TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Correct_Answer_Msg(score));
+            }
+
+            State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Default);
+        }
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -54,93 +125,15 @@ void AMessage_Handler::Auto_Register(std::int64_t user_id, std::string_view user
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Handle_Default_Commands(const TgBot::Message::Ptr& message)
-{
-    if (message->text == SMessage_Commands::Start)
-    {
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
-    }
-    else if (message->text == SMessage_Commands::Profile)
-    {
-        auto user{ User_DB_Controller.Get_User(message->from->id) };
-        auto score{ Stats_DB_Controller.Get_Score(message->from->id) };
-
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Profile_Msg(user, score));
-    }
-    else
-    {
-        Handle_Game_Commands(message);
-    }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Handle_Game_Commands(const TgBot::Message::Ptr& message)
+bool AMessage_Handler::Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference)
 {
     auto current_time{ static_cast<std::int64_t>(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()) };
-    if (auto difference{ current_time - Task_DB_Controller.Get_Time_Stamp(message->from->id) }; difference < 10) // 10 - waiting time
+    if (auto difference{ current_time - Task_DB_Controller.Get_Time_Stamp(message->from->id) }; difference < required_difference)
     {
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Waiting_Time_Msg(10 - difference));
-        return;
-    }
-
-    if (message->text == SMessage_Commands::Programmer_Game)
-    {
-        auto expression{ AProgrammer_Game_Controller::Generate_Expression() };
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Programmer_Game_Msg(expression));
-
-        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Programmer_Game);
-        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
-    }
-    else if (message->text == SMessage_Commands::Math_Game)
-    {
-        auto expression{ AMath_Problem_Game_Controller::Generate_Problem() };
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Math_Game_Msg(expression));
-
-        State_DB_Controller.Set_State(message->from->id, AState_DB_Controller::EState_Type::Math_Game);
-        Task_DB_Controller.Set_Answer(message->from->id, expression.Result);
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Waiting_Time_Msg(required_difference - difference));
+        return false;
     }
 
     Task_DB_Controller.Set_Time_Stamp(message->from->id, current_time);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Handle_Game_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message)
-{
-    auto current_score{ Stats_DB_Controller.Get_Score(user_id) };
-
-    switch (current_state)
-    {
-        case AState_DB_Controller::EState_Type::Programmer_Game:
-        {
-            if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
-            {
-                Stats_DB_Controller.Set_Score(user_id, (current_score - AProgrammer_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Incorrect_Answer_Msg(AProgrammer_Game_Controller::Score, answer));
-            }
-            else
-            {
-                Stats_DB_Controller.Set_Score(user_id, (current_score + AProgrammer_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Correct_Answer_Msg(AProgrammer_Game_Controller::Score));
-            }
-
-            break;
-        }
-        case AState_DB_Controller::EState_Type::Math_Game:
-        {
-            if (auto answer{ Task_DB_Controller.Get_Answer(user_id) }; answer != message)
-            {
-                Stats_DB_Controller.Set_Score(user_id, (current_score - AMath_Problem_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Incorrect_Answer_Msg(AMath_Problem_Game_Controller::Score, answer));
-            }
-            else
-            {
-                Stats_DB_Controller.Set_Score(user_id, (current_score + AMath_Problem_Game_Controller::Score));
-                TG_Bot.getApi().sendMessage(user_id, AMessage_Reply::Get_Correct_Answer_Msg(AMath_Problem_Game_Controller::Score));
-            }
-
-            break;
-        }
-    }
-
-    State_DB_Controller.Set_State(user_id, AState_DB_Controller::EState_Type::Default);
+    return true;
 }

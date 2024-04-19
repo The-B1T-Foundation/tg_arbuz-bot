@@ -45,13 +45,11 @@ public:
     explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller);
     constexpr ~AMessage_Handler() = default;
 
-    void Handle_All_Messages(const TgBot::Message::Ptr& message);
+    void Init();
 
 private:
-    [[clang::always_inline]] __inline__ void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
-    [[clang::always_inline]] __inline__ void Handle_Default_Commands(const TgBot::Message::Ptr& message);
-    [[clang::always_inline]] __inline__ void Handle_Game_Commands(const TgBot::Message::Ptr& message);
-    [[clang::always_inline]] __inline__ void Handle_Game_State(std::int64_t user_id, AState_DB_Controller::EState_Type current_state, std::string_view message);
+    void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
+    bool Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference); // TODO: .................
 
 private:
     TgBot::Bot& TG_Bot;

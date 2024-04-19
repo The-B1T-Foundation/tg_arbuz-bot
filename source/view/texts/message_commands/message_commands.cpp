@@ -23,7 +23,8 @@
 
 #include "message_commands.hpp"
 
-constinit std::string_view SMessage_Commands::Start{ "/start" };
-constinit std::string_view SMessage_Commands::Profile{ "/profile" };
-constinit std::string_view SMessage_Commands::Programmer_Game{ "/pr_game" };
-constinit std::string_view SMessage_Commands::Math_Game{ "/math_game" };
+constinit std::string_view SMessage_Commands::Start{ "start" };
+constinit std::string_view SMessage_Commands::Profile{ "profile" };
+constinit std::string_view SMessage_Commands::Programmer_Game{ "pr_game" };
+constinit std::string_view SMessage_Commands::Math_Game{ "math_game" };
+constinit std::string_view SMessage_Commands::Answer{ "answer" };
