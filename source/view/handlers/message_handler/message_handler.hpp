@@ -45,11 +45,16 @@ public:
     explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller);
     constexpr ~AMessage_Handler() = default;
 
-    void Init();
+    void Bind_Commands();
 
 private:
     void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
     bool Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference); // TODO: .................
+    void Handle_Answer(TgBot::Message::Ptr& message);
+    void Parse_User_Answer(std::string& answer);
+
+private:
+    constexpr static std::size_t Time_To_Wait{ 3 };
 
 private:
     TgBot::Bot& TG_Bot;
