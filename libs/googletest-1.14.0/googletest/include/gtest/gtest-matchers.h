@@ -402,7 +402,7 @@ class MatcherBase : private MatcherDescriberInterface {
   template <typename M, bool = MatcherBase::IsInlined<M>()>
   struct ValuePolicy {
     static const M& Get(const MatcherBase& m) {
-      // When inlined along with Init, need to be explicit to avoid violating
+      // When inlined along with Bind_Commands, need to be explicit to avoid violating
       // strict aliasing rules.
       const M* ptr =
           static_cast<const M*>(static_cast<const void*>(&m.buffer_));

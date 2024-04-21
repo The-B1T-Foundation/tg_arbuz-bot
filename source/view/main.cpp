@@ -56,7 +56,7 @@ int main()
     AStats_DB_Controller stats_db_controller{ *db_cfg };
 
     AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller };
-    message_handler.Init(); // TODO .......
+    message_handler.Bind_Commands();
 
     try
     {
