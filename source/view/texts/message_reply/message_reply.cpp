@@ -26,41 +26,47 @@
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Hello_Msg(std::string_view username)
 {
-    return std::format("Привіт, {} {}\nВітаємо тебе в нашому веселому Телеграм-боті!\nТут ти знайдеш безліч розваг, цікавих ігор та неймовірних пригод.\nГотуйся до захоплюючих вражень і незабутніх моментів!\nВеселощі та розваги чекають на тебе, так що насолоджуйся і грай з задоволенням {}!", username.data(), WAVING_HAND, VIDEO_GAME);
+    return std::format("Привіт, {} {}\nВітаємо тебе в нашому веселому Арбуз-боті{}!\nВіднині ти частина нашої спільноти{}!\nТут ти знайдеш безліч розваг, цікавих ігор та неймовірних пригод.\nГотуйся до захоплюючих вражень і незабутніх моментів!\nВеселощі та розваги чекають на тебе, так що насолоджуйся і грай з задоволенням {}!", username.data(), WAVING_HAND, WATERMELON, MEDAL, VIDEO_GAME);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Profile_Msg(const AUser& user, std::int64_t score)
 {
-    return std::format("Profile info:\nID: {}\nUsername: {}\nName: {}\nScore: {}", user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name(), score);
+    return std::format("Інформація про профіль арбуза{}\nНомер паспорту: {}\nІм'я у системі: {}\nРеальне ім'я: {}\nКількість насіннячка: {}", WATERMELON, user.Get_User_Id(), user.Get_User_Username(), user.Get_User_First_Name(), score);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Programmer_Game_Msg(const programmer_game::SExpression& expression)
 {
-    return std::format("{}\n{}\n{}\nAnswer: ?", expression.First_Operand, expression.Operation, expression.Second_Operand);
+    return std::format("Головний Арбуз вигенерував для тебе задачку з бінарним кодом:\n\n1-число:\t{}\n2-число:\t{}\nОперація яку слід примінити: {}\n\nВідповідь напиши за допомогою /answer (тут пробіл) відповідь", expression.First_Operand, expression.Second_Operand, expression.Operation);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Math_Game_Msg(const math_game::SMath_Expression& expression)
 {
-    return std::format("Try to solve: {}", expression.Expression);
+    return std::format("Головний Арбуз вигенерував для тебе математичну задачку:\n{}\n\nВідповідь напиши за допомогою /answer (тут пробіл) відповідь", expression.Expression);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Waiting_Time_Msg(std::int64_t time)
 {
-    return std::format("Please wait {} min", time);
+    return std::format("Стій ковбой, зачекай {}хв", time);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Correct_Answer_Msg(std::int64_t score)
 {
-    return std::format("Correct answer: +{}", score);
+    return std::format("Друже вітаю тебе, ти правильно вирішив цю задачу {}\nУ тебе виросло ще {} насіннячок.", CHECK_MARK_GREEN, score);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer)
 {
-    return std::format("Incorrect answer: -{}\nCorrect answer: {}", score, correct_answer);
+    return std::format("Нажаль ти не справився з вирішенням цієї задачи {}\nТому {} насіннячок зсохлося.\nПравильна відповідь це: {}", STOP_SIGN, score, correct_answer);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Help_Msg()
+{
+    return std::format("Привіт Арбуз, це блок з поясненням деяких ігрових механік {}\n\n1) Як відповідати на задачі ?\nВсе дуже просто пишеш команду /answer і через пробіл відповідь, наприклад: /answer 25\n\n2) Як вирішити гру pr_game, погугли про оператори &(AND) |(OR)\n\nЯкщо в тебе виникли проблеми, пиши власнику бота: https://t.me/hellowolrd36", DETAIL);
 }

@@ -75,6 +75,10 @@ void AMessage_Handler::Bind_Commands()
     {
         Handle_Answer(message);
     });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Help.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Help_Msg());
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
