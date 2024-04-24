@@ -47,4 +47,5 @@ public:
     static std::string Get_Correct_Answer_Msg(std::int64_t score);
     static std::string Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer);
     static std::string Get_Help_Msg();
+    static std::string Get_Info_About_Project();
 };

@@ -29,3 +29,4 @@ constinit std::string_view SMessage_Commands::Programmer_Game{ "pr_game" };
 constinit std::string_view SMessage_Commands::Math_Game{ "math_game" };
 constinit std::string_view SMessage_Commands::Answer{ "answer" };
 constinit std::string_view SMessage_Commands::Help{ "help" };
+constinit std::string_view SMessage_Commands::About_Project{ "about_project" };
