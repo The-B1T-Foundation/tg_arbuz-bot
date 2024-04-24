@@ -32,3 +32,4 @@
 #define STOP_SIGN "🛑"
 #define CHECK_MARK_GREEN "✅"
 #define FLY_MONEY "💸"
+#define BOOKS "📚"
