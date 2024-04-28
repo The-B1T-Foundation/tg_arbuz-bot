@@ -85,7 +85,7 @@ void AMessage_Handler::Bind_Commands()
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Definiton.data(), [this](TgBot::Message::Ptr message) -> void
     {
-        Parse_English_Word(message->text);
+        Cut_User_Input(message->text, SMessage_Commands::Definiton.size());
         if (auto response{ English_Words_API_Controller.Get_Definition(message->text) }; response != std::nullopt)
         {
             TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Word_Definition(message->text, response.value()));
@@ -145,7 +145,7 @@ void AMessage_Handler::Handle_Answer(TgBot::Message::Ptr& message)
         }
 
         auto answer{ Task_DB_Controller.Get_Answer(message->from->id) };
-        Parse_User_Answer(message->text);
+        Cut_User_Input(message->text, SMessage_Commands::Answer.size());
 
         if (answer != message->text)
         {
@@ -162,17 +162,9 @@ void AMessage_Handler::Handle_Answer(TgBot::Message::Ptr& message)
     }
 }
 
-// TODO: DRY ................................................ ->
 // ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Parse_User_Answer(std::string& answer)
+void AMessage_Handler::Cut_User_Input(std::string& input_text, std::size_t command_size)
 {
-    answer.erase(answer.begin(), answer.begin() + static_cast<std::ptrdiff_t>(SMessage_Commands::Answer.size() + 1)); // erase /answer part, + 1 for '/'
-    answer.erase(std::remove(answer.begin(), answer.end(), ' '), answer.end());
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Parse_English_Word(std::string& input_text)
-{
-    input_text.erase(input_text.begin(), input_text.begin() + static_cast<std::ptrdiff_t >(SMessage_Commands::Definiton.size() + 1)); // erase /def part, + 1 for '/'
+    input_text.erase(input_text.begin(), input_text.begin() + static_cast<std::ptrdiff_t >(command_size + 1)); // erase /some_command part, + 1 for '/'
     input_text.erase(std::remove(input_text.begin(), input_text.end(), ' '), input_text.end());
 }

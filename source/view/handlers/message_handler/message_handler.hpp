@@ -52,8 +52,7 @@ private:
     void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
     bool Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference);
     void Handle_Answer(TgBot::Message::Ptr& message);
-    void Parse_User_Answer(std::string& answer);
-    void Parse_English_Word(std::string& input_text);
+    void Cut_User_Input(std::string& input_text, std::size_t command_size);
 
 private:
     constexpr static std::size_t Time_To_Wait{ 3 };
