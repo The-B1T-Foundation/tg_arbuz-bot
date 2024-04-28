@@ -23,6 +23,7 @@
 
 #include "db_config_controller.hpp"
 
+// ---------------------------------------------------------------------------------------------------------------------
 std::optional<ADB_Config> ADB_Config_Controller::Load_Config()
 {
     const char* pg_host{ std::getenv("POSTGRES_HOST") };

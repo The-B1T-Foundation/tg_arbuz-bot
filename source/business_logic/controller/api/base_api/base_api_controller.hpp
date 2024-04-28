@@ -23,16 +23,34 @@
 
 #pragma once
 
-#include <string>
+#include <sstream>
+#include <functional>
+#include <iostream>
+#include <format>
 
-struct SMessage_Commands
+#include <curl/curl.h>
+#include <json.hpp>
+
+using nljson = nlohmann::json;
+
+class ABase_API_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
+public:
+    explicit ABase_API_Controller(std::string_view url);
+    virtual ~ABase_API_Controller() = default;
+
+protected:
+    static std::size_t Write_Callback(char* ptr, std::size_t size, std::size_t nmemb, void* data);
+
+protected:
+    enum EHTTP_STATUS : std::uint16_t
+    {
+        OK = 200,
+        BAD_REQUEST = 400,
+        UNAUTHORIZED = 401,
+        NOT_FOUND = 404,
+    };
+
+    std::string Url;
+    CURL* Curl;
 };

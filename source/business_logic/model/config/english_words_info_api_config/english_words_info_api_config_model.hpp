@@ -25,14 +25,16 @@
 
 #include <string>
 
-struct SMessage_Commands
+class AEnglish_Words_Info_API_Config
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
+public:
+    explicit AEnglish_Words_Info_API_Config(std::string_view api_key, std::string_view api_host);
+    ~AEnglish_Words_Info_API_Config() = default;
+
+    [[nodiscard]] std::string_view Get_API_Key() const;
+    [[nodiscard]] std::string_view Get_API_Host() const;
+
+private:
+    std::string_view API_Key;
+    std::string_view API_Host;
 };

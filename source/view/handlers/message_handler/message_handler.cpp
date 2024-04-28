@@ -24,8 +24,8 @@
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller) :
-        TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller) :
+    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -83,6 +83,17 @@ void AMessage_Handler::Bind_Commands()
     {
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Info_About_Project());
     });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Definiton.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        Cut_User_Input(message->text, SMessage_Commands::Definiton.size());
+        if (auto response{ English_Words_API_Controller.Get_Definition(message->text) }; response != std::nullopt)
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Word_Definition(message->text, response.value()));
+            return;
+        }
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition());
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -134,7 +145,7 @@ void AMessage_Handler::Handle_Answer(TgBot::Message::Ptr& message)
         }
 
         auto answer{ Task_DB_Controller.Get_Answer(message->from->id) };
-        Parse_User_Answer(message->text);
+        Cut_User_Input(message->text, SMessage_Commands::Answer.size());
 
         if (answer != message->text)
         {
@@ -152,8 +163,8 @@ void AMessage_Handler::Handle_Answer(TgBot::Message::Ptr& message)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void AMessage_Handler::Parse_User_Answer(std::string& answer)
+void AMessage_Handler::Cut_User_Input(std::string& input_text, std::size_t command_size)
 {
-    answer.erase(answer.begin(), answer.begin() + static_cast<std::ptrdiff_t>(SMessage_Commands::Answer.size() + 1)); // erase /answer part, + 1 for '/'
-    answer.erase(std::remove(answer.begin(), answer.end(), ' '), answer.end());
+    input_text.erase(input_text.begin(), input_text.begin() + static_cast<std::ptrdiff_t >(command_size + 1)); // erase /some_command part, + 1 for '/'
+    input_text.erase(std::remove(input_text.begin(), input_text.end(), ' '), input_text.end());
 }

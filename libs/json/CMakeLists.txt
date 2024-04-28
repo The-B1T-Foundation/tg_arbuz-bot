@@ -23,8 +23,7 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-add_subdirectory(tg_api)
-add_subdirectory(postgre_sql)
-add_subdirectory(googletest-1.14.0)
-add_subdirectory(utf8_ustring)
-add_subdirectory(json)
+set(LIBRARY_NAME JSON)
+
+add_library(${LIBRARY_NAME} INTERFACE json.hpp)
+target_include_directories(${LIBRARY_NAME} INTERFACE ./)

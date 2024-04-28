@@ -21,18 +21,21 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "english_words_info_api_config_model.hpp"
 
-#include <string>
+// ---------------------------------------------------------------------------------------------------------------------
+AEnglish_Words_Info_API_Config::AEnglish_Words_Info_API_Config(std::string_view api_key, std::string_view api_host) :
+    API_Key{ api_key }, API_Host{ api_host }
+{ }
 
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::string_view AEnglish_Words_Info_API_Config::Get_API_Key() const
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-};
+    return API_Key;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string_view AEnglish_Words_Info_API_Config::Get_API_Host() const
+{
+    return API_Host;
+}

@@ -21,18 +21,22 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "english_words_info_api_config_controller.hpp"
 
-#include <string>
-
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<AEnglish_Words_Info_API_Config> AEnglish_Words_Info_API_Config_Controller::Load_Config()
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-};
+    char* api_key{ std::getenv("ENGLISH_WORDS_INFO_API_KEY") };
+    if (!api_key)
+    {
+        return std::nullopt;
+    }
+
+    char* api_host{ std::getenv("ENGLISH_WORDS_INFO_API_HOST") };
+    if (!api_host)
+    {
+        return std::nullopt;
+    }
+
+    return AEnglish_Words_Info_API_Config{ api_key, api_host };
+}

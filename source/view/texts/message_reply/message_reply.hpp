@@ -48,4 +48,6 @@ public:
     static std::string Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer);
     static std::string Get_Help_Msg();
     static std::string Get_Info_About_Project();
+    static std::string Get_Word_Definition(std::string_view primary_word, std::string_view definiton);
+    static std::string Get_Not_Found_Word_Definition();
 };

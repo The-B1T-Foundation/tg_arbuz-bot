@@ -23,16 +23,21 @@
 
 #pragma once
 
-#include <string>
+#include <optional>
+#include <format>
 
-struct SMessage_Commands
+#include <controller/api/base_api/base_api_controller.hpp>
+#include <model/config/english_words_info_api_config/english_words_info_api_config_model.hpp>
+
+class AEnglish_Words_Info_API_Controller : public ABase_API_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
+public:
+    explicit AEnglish_Words_Info_API_Controller(const AEnglish_Words_Info_API_Config& english_words_info_api_config);
+    ~AEnglish_Words_Info_API_Controller() override;
+
+    std::optional<std::string> Get_Definition(const std::string& word);
+
+private:
+    static nljson Json_Response;
+    curl_slist* Headers;
 };

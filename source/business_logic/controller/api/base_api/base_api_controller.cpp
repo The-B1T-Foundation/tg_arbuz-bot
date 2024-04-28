@@ -21,18 +21,22 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "base_api_controller.hpp"
 
-#include <string>
+// ---------------------------------------------------------------------------------------------------------------------
+ABase_API_Controller::ABase_API_Controller(std::string_view url) :
+    Url{ url }, Curl{ nullptr }
+{ }
 
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::size_t ABase_API_Controller::Write_Callback(char* ptr, std::size_t size, std::size_t nmemb, void* data)
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-};
+    auto result{ static_cast<nljson*>(data) };
+
+    std::stringstream ss{};
+    ss.write(ptr, size * nmemb);
+
+    *result = nljson::parse(ss);
+
+    return size * nmemb;
+}

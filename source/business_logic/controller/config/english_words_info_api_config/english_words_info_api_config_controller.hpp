@@ -23,16 +23,15 @@
 
 #pragma once
 
-#include <string>
+#include <optional>
 
-struct SMessage_Commands
+#include <model/config/english_words_info_api_config/english_words_info_api_config_model.hpp>
+
+class AEnglish_Words_Info_API_Config_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
+public:
+    constexpr AEnglish_Words_Info_API_Config_Controller() = default;
+    constexpr ~AEnglish_Words_Info_API_Config_Controller() = default;
+
+    static std::optional<AEnglish_Words_Info_API_Config> Load_Config();
 };
