@@ -25,6 +25,7 @@
 
 #include <controller/config/db_config/db_config_controller.hpp>
 #include <controller/config/tg_config/tg_config_controller.hpp>
+#include <controller/config/english_words_info_api_config/english_words_info_api_config_controller.hpp>
 
 #include <logger/logger_utility.hpp>
 #include <message_handler.hpp>
@@ -46,6 +47,13 @@ int main()
         ALogger_Utility::Error("Error reading db config data");
         return -1;
     }
+
+    auto english_words_info_api_config{ AEnglish_Words_Info_API_Config_Controller::Load_Config() };
+    if (english_words_info_api_config == std::nullopt)
+    {
+        ALogger_Utility::Error("Error reading english words api config data");
+        return -1;
+    }
 #endif
 
     TgBot::Bot tg_bot{ tg_cfg->Get_TG_Token().data() };
@@ -54,8 +62,9 @@ int main()
     AState_DB_Controller state_db_controller{ *db_cfg };
     ATask_DB_Controller task_db_controller{ *db_cfg };
     AStats_DB_Controller stats_db_controller{ *db_cfg };
+    AEnglish_Words_Info_API_Controller english_words_api_controller{ *english_words_info_api_config };
 
-    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller };
+    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller, english_words_api_controller };
     message_handler.Bind_Commands();
 
     try
