@@ -23,6 +23,7 @@
 
 #include "english_words_info_api_config_controller.hpp"
 
+// ---------------------------------------------------------------------------------------------------------------------
 std::optional<AEnglish_Words_Info_API_Config> AEnglish_Words_Info_API_Config_Controller::Load_Config()
 {
     char* api_key{ std::getenv("ENGLISH_WORDS_INFO_API_KEY") };
