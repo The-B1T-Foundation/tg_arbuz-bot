@@ -31,6 +31,7 @@ set(MODEL_HEADERS
         model/config/db_config/db_config_model.hpp
         model/config/tg_config/tg_config_model.hpp
         model/math_problem_game/math_problem_game_expression_model.hpp
+        model/config/english_words_info_api_config/english_words_info_api_config_model.hpp
 )
 
 set(MODEL_SOURCES
@@ -39,6 +40,7 @@ set(MODEL_SOURCES
         model/config/db_config/db_config_model.cpp
         model/config/tg_config/tg_config_model.cpp
         model/math_problem_game/math_problem_game_expression_model.cpp
+        model/config/english_words_info_api_config/english_words_info_api_config_model.cpp
 )
 
 set(CONTROLLER_HEADERS
@@ -51,6 +53,9 @@ set(CONTROLLER_HEADERS
         controller/db/task_db/task_db_controller.hpp
         controller/db/stats_db/stats_db_controller.hpp
         controller/math_problem_game/math_problem_game_controller.hpp
+        controller/api/base_api/base_api_controller.hpp
+        controller/api/english_words_info_api/english_words_info_api_controller.hpp
+        controller/config/english_words_info_api_config/english_words_info_api_config_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
@@ -63,6 +68,9 @@ set(CONTROLLER_SOURCES
         controller/db/task_db/task_db_controller.cpp
         controller/db/stats_db/stats_db_controller.cpp
         controller/math_problem_game/math_problem_game_controller.cpp
+        controller/api/base_api/base_api_controller.cpp
+        controller/api/english_words_info_api/english_words_info_api_controller.cpp
+        controller/config/english_words_info_api_config/english_words_info_api_config_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC
@@ -72,7 +80,7 @@ add_library(${LIBRARY_NAME} STATIC
         ${CONTROLLER_SOURCES})
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ./)
-target_link_libraries(${LIBRARY_NAME} PUBLIC UTILS POSTGRE_SQL UTF8_USTRING)
+target_link_libraries(${LIBRARY_NAME} PUBLIC UTILS POSTGRE_SQL UTF8_USTRING JSON)
 
 include_directories(model)
 include_directories(controller)
