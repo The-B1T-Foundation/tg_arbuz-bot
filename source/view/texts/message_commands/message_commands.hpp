@@ -34,4 +34,5 @@ struct SMessage_Commands
     constinit static std::string_view Answer;
     constinit static std::string_view Help;
     constinit static std::string_view About_Project;
+    constinit static std::string_view Definiton;
 };

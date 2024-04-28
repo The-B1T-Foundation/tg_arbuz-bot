@@ -76,3 +76,15 @@ std::string AMessage_Reply::Get_Info_About_Project()
 {
     return std::format("Інформація про цей проект{}\n\nЦе Open-Source проект ліцензований під MIT ліцензією.\nПосилання на код проекту: https://github.com/The-B1T-Foundation/tg_arbuz-bot\nПровідний розробник проекту: https://github.com/b1tflyyyy\n\nСвої побажання щодо функціоналу надсилайте до @hellowolrd36 або на пошту theb1tfoundation.gh@gmail.com", BOOKS);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Word_Definition(std::string_view primary_word, std::string_view definiton)
+{
+    return std::format("Визначення слова {}:\n{} - {}", primary_word, primary_word, definiton);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Not_Found_Word_Definition()
+{
+    return std::format("Скоріш за все ти ввів дивне слово, я не можу знайти визначення для нього)");
+}
