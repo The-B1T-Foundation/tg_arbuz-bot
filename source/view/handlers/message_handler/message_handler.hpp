@@ -29,6 +29,7 @@
 #include <controller/db/state_db/state_db_controller.hpp>
 #include <controller/db/task_db/task_db_controller.hpp>
 #include <controller/db/stats_db/stats_db_controller.hpp>
+#include <controller/api/english_words_info_api/english_words_info_api_controller.hpp>
 
 #include <controller/programmer_game/programmer_game_controller.hpp>
 #include <controller/math_problem_game/math_problem_game_controller.hpp>
@@ -42,16 +43,17 @@
 class AMessage_Handler
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller);
+    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller);
     constexpr ~AMessage_Handler() = default;
 
     void Bind_Commands();
 
 private:
     void Auto_Register(std::int64_t user_id, std::string_view username, std::string_view first_name);
-    bool Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference); // TODO: .................
+    bool Can_Use_Command(const TgBot::Message::Ptr& message, std::int64_t required_difference);
     void Handle_Answer(TgBot::Message::Ptr& message);
     void Parse_User_Answer(std::string& answer);
+    void Parse_English_Word(std::string& input_text);
 
 private:
     constexpr static std::size_t Time_To_Wait{ 3 };
@@ -63,4 +65,5 @@ private:
     AState_DB_Controller& State_DB_Controller;
     ATask_DB_Controller& Task_DB_Controller;
     AStats_DB_Controller& Stats_DB_Controller;
+    AEnglish_Words_Info_API_Controller& English_Words_API_Controller;
 };
