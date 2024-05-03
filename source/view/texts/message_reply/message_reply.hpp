@@ -32,6 +32,7 @@
 #include <model/programmer_game/programmer_game_expression_model.hpp>
 #include <model/math_problem_game/math_problem_game_expression_model.hpp>
 #include <model/user/user_model.hpp>
+#include <model/metrics/metrics_model.hpp>
 
 class AMessage_Reply
 {
@@ -50,4 +51,6 @@ public:
     static std::string Get_Info_About_Project();
     static std::string Get_Word_Definition(std::string_view primary_word, std::string_view definiton);
     static std::string Get_Not_Found_Word_Definition();
+    static std::string Get_Metrics_Count_Msg(std::int64_t metrics_count);
+    static std::string Get_Metrics_Msg(const SMetrics& metrics);
 };
