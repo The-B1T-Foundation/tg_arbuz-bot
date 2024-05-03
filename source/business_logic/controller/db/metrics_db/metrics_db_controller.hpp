@@ -23,18 +23,16 @@
 
 #pragma once
 
-#include <string>
+#include <controller/db/base_db/base_db_controller.hpp>
+#include <model/metrics/metrics_model.hpp>
 
-struct SMessage_Commands
+class AMetrics_DB_Controller : public ABase_DB_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
+public:
+    explicit AMetrics_DB_Controller(const ADB_Config& db_cfg);
+    ~AMetrics_DB_Controller() override = default;
+
+    void Set_Metrics(const SMetrics& metrics);
+    SMetrics Get_Metrics(std::int64_t metrics_id);
+    std::int64_t Get_Available_Metrics_Count();
 };

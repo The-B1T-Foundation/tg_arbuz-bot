@@ -24,8 +24,11 @@
 #include "message_handler.hpp"
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller) :
-    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }
+std::mutex AMessage_Handler::Mutex{ };
+
+// ---------------------------------------------------------------------------------------------------------------------
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg) :
+    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }, Metrics_DB_Controller{ metrics_db_controller }, TG_Root_User_Cfg{ tg_root_user_cfg }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -33,11 +36,17 @@ void AMessage_Handler::Bind_Commands()
 {
     TG_Bot.getEvents().onCommand(SMessage_Commands::Start.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Start_Request_Count;
+
         Auto_Register(message->from->id, message->from->username, message->from->firstName);
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Hello_Msg(message->from->username));
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Profile.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Profile_Request_Count;
+
         Auto_Register(message->from->id, message->from->username, message->from->firstName);
 
         auto user{ User_DB_Controller.Get_User(message->from->id) };
@@ -47,6 +56,9 @@ void AMessage_Handler::Bind_Commands()
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Programmer_Game.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Pr_Game_Request_Count;
+
         Auto_Register(message->from->id, message->from->username, message->from->firstName);
 
         if (Can_Use_Command(message, Time_To_Wait))
@@ -60,6 +72,9 @@ void AMessage_Handler::Bind_Commands()
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Math_Game.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Math_Game_Request_Count;
+
         Auto_Register(message->from->id, message->from->username, message->from->firstName);
 
         if (Can_Use_Command(message, Time_To_Wait))
@@ -77,14 +92,23 @@ void AMessage_Handler::Bind_Commands()
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Help.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+
+        ++Metrics.Help_Request_Count;
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Help_Msg());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::About_Project.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.About_Project_Request_Count;
+
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Info_About_Project());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Definiton.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Definition_Request_Count;
+
         Cut_User_Input(message->text, SMessage_Commands::Definiton.size());
         if (auto response{ English_Words_API_Controller.Get_Definition(message->text) }; response != std::nullopt)
         {
@@ -94,6 +118,42 @@ void AMessage_Handler::Bind_Commands()
 
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition());
     });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Count.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (!Is_Root_User(message->from->id))
+        {
+            return;
+        }
+
+        auto metrics_count{ Metrics_DB_Controller.Get_Available_Metrics_Count() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Count_Msg(metrics_count));
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Metrics.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        Cut_User_Input(message->text, SMessage_Commands::Get_Metrics.size());
+        std::int64_t metrics_id{ strtoll(message->text.c_str(), nullptr, 10) };
+
+        auto metrics{ Metrics_DB_Controller.Get_Metrics(metrics_id) };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Msg(metrics));
+    });
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void AMessage_Handler::Run_Metrics()
+{
+    using namespace std::chrono_literals;
+
+    while (true)
+    {
+        Mutex.lock();
+
+        Metrics.Set_Current_Date();
+        Metrics_DB_Controller.Set_Metrics(Metrics);
+        Metrics.Clear();
+
+        Mutex.unlock();
+        std::this_thread::sleep_for(18h);
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -165,6 +225,12 @@ void AMessage_Handler::Handle_Answer(TgBot::Message::Ptr& message)
 // ---------------------------------------------------------------------------------------------------------------------
 void AMessage_Handler::Cut_User_Input(std::string& input_text, std::size_t command_size)
 {
-    input_text.erase(input_text.begin(), input_text.begin() + static_cast<std::ptrdiff_t >(command_size + 1)); // erase /some_command part, + 1 for '/'
+    input_text.erase(input_text.begin(), input_text.begin() + static_cast<std::ptrdiff_t>(command_size + 1)); // erase /some_command part, + 1 for '/'
     input_text.erase(std::remove(input_text.begin(), input_text.end(), ' '), input_text.end());
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+bool AMessage_Handler::Is_Root_User(std::int64_t user_id)
+{
+    return user_id == TG_Root_User_Cfg.Get_Root_Id();
 }

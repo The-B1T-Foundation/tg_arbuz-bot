@@ -23,18 +23,16 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint>
 
-struct SMessage_Commands
+class ATG_Root_User_Config
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
+public:
+    explicit ATG_Root_User_Config(std::int64_t root_id);
+    constexpr ~ATG_Root_User_Config() = default;
+
+    [[nodiscard]] std::int64_t Get_Root_Id() const;
+
+private:
+    std::int64_t Root_Id;
 };

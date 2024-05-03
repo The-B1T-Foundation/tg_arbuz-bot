@@ -21,20 +21,16 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "tg_root_user_config_controller.hpp"
 
-#include <string>
-
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<ATG_Root_User_Config> ATG_Root_User_Config_Controller::Load_Config()
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
-};
+    char* tg_root_user{ std::getenv("TG_ROOT_USER") };
+    if (!tg_root_user)
+    {
+        return std::nullopt;
+    }
+
+    return ATG_Root_User_Config{ strtoll(tg_root_user, nullptr, 10) };
+}

@@ -21,20 +21,15 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "tg_root_user_config_model.hpp"
 
-#include <string>
+// ---------------------------------------------------------------------------------------------------------------------
+ATG_Root_User_Config::ATG_Root_User_Config(std::int64_t root_id) :
+    Root_Id{ root_id }
+{ }
 
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::int64_t ATG_Root_User_Config::Get_Root_Id() const
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
-};
+    return Root_Id;
+}

@@ -23,18 +23,16 @@
 
 #pragma once
 
-#include <string>
+#include <optional>
+#include <cstdlib>
 
-struct SMessage_Commands
+#include <model/config/tg_root_user_config/tg_root_user_config_model.hpp>
+
+class ATG_Root_User_Config_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
+public:
+    constexpr ATG_Root_User_Config_Controller() = default;
+    constexpr ~ATG_Root_User_Config_Controller() = default;
+
+    static std::optional<ATG_Root_User_Config> Load_Config();
 };

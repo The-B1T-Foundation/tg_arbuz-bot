@@ -23,18 +23,33 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint>
+#include <chrono>
+#include <ctime>
+#include <iostream>
 
-struct SMessage_Commands
+struct SMetrics
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Count;
-    constinit static std::string_view Get_Metrics;
+public:
+    explicit SMetrics();
+    [[maybe_unused]] explicit SMetrics(std::int64_t start_request_count, std::int64_t profile_request_count, std::int64_t pr_game_request_count, std::int64_t math_game_request_count, std::int64_t help_request_count, std::int64_t about_project_request_count, std::int64_t definition_request_count, std::string current_date);
+
+    ~SMetrics() = default;
+
+    void Set_Current_Date();
+    [[nodiscard]] const std::string& Get_Current_Date() const;
+
+    void Clear();
+
+public:
+    std::int64_t Start_Request_Count;
+    std::int64_t Profile_Request_Count;
+    std::int64_t Pr_Game_Request_Count;
+    std::int64_t Math_Game_Request_Count;
+    std::int64_t Help_Request_Count;
+    std::int64_t About_Project_Request_Count;
+    std::int64_t Definition_Request_Count;
+
+private:
+    std::string Current_Date;
 };
