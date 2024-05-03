@@ -31,3 +31,5 @@ constinit std::string_view SMessage_Commands::Answer{ "answer" };
 constinit std::string_view SMessage_Commands::Help{ "help" };
 constinit std::string_view SMessage_Commands::About_Project{ "about_project" };
 constinit std::string_view SMessage_Commands::Definiton{ "def" };
+constinit std::string_view SMessage_Commands::Metrics_Count{ "metrics_count" };
+constinit std::string_view SMessage_Commands::Get_Metrics{ "get_metrics" };
