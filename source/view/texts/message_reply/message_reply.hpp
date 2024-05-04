@@ -48,9 +48,10 @@ public:
     static std::string Get_Correct_Answer_Msg(std::int64_t score);
     static std::string Get_Incorrect_Answer_Msg(std::int64_t score, std::string_view correct_answer);
     static std::string Get_Help_Msg();
-    static std::string Get_Info_About_Project();
-    static std::string Get_Word_Definition(std::string_view primary_word, std::string_view definiton);
-    static std::string Get_Not_Found_Word_Definition();
+    static std::string Get_Info_About_Project_Msg();
+    static std::string Get_Word_Definition_Msg(std::string_view primary_word, std::string_view definiton);
+    static std::string Get_Not_Found_Word_Definition_Msg();
     static std::string Get_Metrics_Count_Msg(std::int64_t metrics_count);
     static std::string Get_Metrics_Msg(const SMetrics& metrics);
+    static std::string Get_Limit_Api_Requests_Msg();
 };

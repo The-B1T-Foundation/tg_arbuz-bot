@@ -72,19 +72,19 @@ std::string AMessage_Reply::Get_Help_Msg()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Info_About_Project()
+std::string AMessage_Reply::Get_Info_About_Project_Msg()
 {
     return std::format("Інформація про цей проект{}\n\nЦе Open-Source проект ліцензований під MIT ліцензією.\nПосилання на код проекту: https://github.com/The-B1T-Foundation/tg_arbuz-bot\nПровідний розробник проекту: https://github.com/b1tflyyyy\n\nСвої побажання щодо функціоналу надсилайте на пошту theb1tfoundation.gh@gmail.com", BOOKS);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Word_Definition(std::string_view primary_word, std::string_view definiton)
+std::string AMessage_Reply::Get_Word_Definition_Msg(std::string_view primary_word, std::string_view definiton)
 {
     return std::format("Визначення слова {}:\n{} - {}", primary_word, primary_word, definiton);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMessage_Reply::Get_Not_Found_Word_Definition()
+std::string AMessage_Reply::Get_Not_Found_Word_Definition_Msg()
 {
     return std::format("Скоріш за все ти ввів дивне слово, я не можу знайти визначення для нього)");
 }
@@ -99,4 +99,9 @@ std::string AMessage_Reply::Get_Metrics_Count_Msg(std::int64_t metrics_count)
 std::string AMessage_Reply::Get_Metrics_Msg(const SMetrics& metrics)
 {
     return std::format("Метрики Arbuz-Bot\n\nДата: {}\n\nКількість реквестів на команди:\nStart: {}\nProfile: {}\nProgrammer Game: {}\nMath Game: {}\nHelp: {}\nAbout Project: {}\nDefinition: {}", metrics.Get_Current_Date(), metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count);
+}
+
+std::string AMessage_Reply::Get_Limit_Api_Requests_Msg()
+{
+    return std::string{ "Нажаль ліміт запросів перевищено!\nСпробуйте пізніше)" };
 }
