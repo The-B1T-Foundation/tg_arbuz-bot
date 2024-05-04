@@ -27,10 +27,12 @@ set(LIBRARY_NAME UTILS)
 
 set(HEADERS
         logger/logger_utility.hpp
+        api_requests_limiter/api_requests_limiter.hpp
 )
 
 set(SOURCES
         logger/logger_utility.cpp
+        api_requests_limiter/api_requests_limiter.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})

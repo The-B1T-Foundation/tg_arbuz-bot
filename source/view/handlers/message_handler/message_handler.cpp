@@ -28,7 +28,7 @@ std::mutex AMessage_Handler::Mutex{ };
 
 // ---------------------------------------------------------------------------------------------------------------------
 AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg) :
-    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }, Metrics_DB_Controller{ metrics_db_controller }, TG_Root_User_Cfg{ tg_root_user_cfg }
+    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }, Metrics_DB_Controller{ metrics_db_controller }, TG_Root_User_Cfg{ tg_root_user_cfg }, Words_Api_Requests_Limiter{ 2500, 24 }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -102,21 +102,28 @@ void AMessage_Handler::Bind_Commands()
         std::lock_guard<std::mutex> locker(Mutex);
         ++Metrics.About_Project_Request_Count;
 
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Info_About_Project());
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Info_About_Project_Msg());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Definiton.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        if (!Words_Api_Requests_Limiter.Can_Send_Request())
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Limit_Api_Requests_Msg());
+            return;
+        }
+
         std::lock_guard<std::mutex> locker(Mutex);
         ++Metrics.Definition_Request_Count;
 
         Cut_User_Input(message->text, SMessage_Commands::Definiton.size());
         if (auto response{ English_Words_API_Controller.Get_Definition(message->text) }; response != std::nullopt)
         {
-            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Word_Definition(message->text, response.value()));
+            TG_Bot.getApi().sendMessage(message->chat->id,
+                                        AMessage_Reply::Get_Word_Definition_Msg(message->text, response.value()));
             return;
         }
 
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition());
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition_Msg());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Count.data(), [this](TgBot::Message::Ptr message) -> void
     {
@@ -152,7 +159,7 @@ void AMessage_Handler::Run_Metrics()
         Metrics.Clear();
 
         Mutex.unlock();
-        std::this_thread::sleep_for(18h);
+        std::this_thread::sleep_for(1h);
     }
 }
 

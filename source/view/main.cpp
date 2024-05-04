@@ -49,8 +49,8 @@ int main()
         return -1;
     }
 
-    auto english_words_info_api_config{ AEnglish_Words_Info_API_Config_Controller::Load_Config() };
-    if (english_words_info_api_config == std::nullopt)
+    auto english_words_info_api_cfg{AEnglish_Words_Info_API_Config_Controller::Load_Config() };
+    if (english_words_info_api_cfg == std::nullopt)
     {
         ALogger_Utility::Error("Error reading english words api config data");
         return -1;
@@ -71,7 +71,7 @@ int main()
     ATask_DB_Controller task_db_controller{ *db_cfg };
     AStats_DB_Controller stats_db_controller{ *db_cfg };
     AMetrics_DB_Controller metrics_db_controller{ *db_cfg };
-    AEnglish_Words_Info_API_Controller english_words_api_controller{ *english_words_info_api_config };
+    AEnglish_Words_Info_API_Controller english_words_api_controller{ *english_words_info_api_cfg };
 
     AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller, english_words_api_controller, metrics_db_controller, *tg_root_user_cfg };
     message_handler.Bind_Commands();
