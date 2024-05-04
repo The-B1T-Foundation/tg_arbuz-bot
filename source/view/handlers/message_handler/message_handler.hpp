@@ -35,9 +35,10 @@
 #include <controller/db/stats_db/stats_db_controller.hpp>
 #include <controller/db/metrics_db/metrics_db_controller.hpp>
 #include <controller/api/english_words_info_api/english_words_info_api_controller.hpp>
-
 #include <controller/programmer_game/programmer_game_controller.hpp>
 #include <controller/math_problem_game/math_problem_game_controller.hpp>
+
+#include <api_requests_limiter/api_requests_limiter.hpp>
 
 #include <model/user/user_model.hpp>
 #include <model/config/tg_root_user_config/tg_root_user_config_model.hpp>
@@ -64,7 +65,7 @@ private:
     bool Is_Root_User(std::int64_t user_id);
 
 private:
-    constexpr static std::size_t Time_To_Wait{ 3 };
+    constexpr static std::size_t Time_To_Wait{ 1 };
 
 private:
     static std::mutex Mutex;
@@ -79,4 +80,5 @@ private:
     AStats_DB_Controller& Stats_DB_Controller;
     AMetrics_DB_Controller& Metrics_DB_Controller;
     AEnglish_Words_Info_API_Controller& English_Words_API_Controller;
+    AApi_Requests_Limiter Words_Api_Requests_Limiter;
 };
