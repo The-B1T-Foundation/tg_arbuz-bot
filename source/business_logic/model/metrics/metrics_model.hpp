@@ -39,6 +39,7 @@ public:
     void Set_Current_Date();
     [[nodiscard]] const std::string& Get_Current_Date() const;
 
+    [[nodiscard]] std::int64_t Get_Total_Number_Of_Requests() const;
     void Clear();
 
 public:
