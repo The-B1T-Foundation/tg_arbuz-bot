@@ -31,7 +31,7 @@ AMetrics_DB_Controller::AMetrics_DB_Controller(const ADB_Config& db_cfg) :
 // ---------------------------------------------------------------------------------------------------------------------
 void AMetrics_DB_Controller::Set_Metrics(const SMetrics& metrics)
 {
-    Exec_Query(std::format(R"(INSERT INTO {} (start_req, profile_req, pr_game_req, math_game_req, help_req, about_project_req, definition_req, date) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'))", Table_Name, metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count, metrics.Get_Current_Date()));
+    Exec_Query(std::format(R"(INSERT INTO {} (start_req, profile_req, pr_game_req, math_game_req, help_req, about_project_req, definition_req, date, total_number_of_requests) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'))", Table_Name, metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count, metrics.Get_Current_Date(), metrics.Get_Total_Number_Of_Requests()));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,15 @@ SMetrics AMetrics_DB_Controller::Get_Metrics(std::int64_t metrics_id)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::int64_t AMetrics_DB_Controller::Get_Available_Metrics_Count()
+std::pair<std::int64_t, std::int64_t> AMetrics_DB_Controller::Get_Metrics_Range()
 {
-    auto response{ Exec_Query(std::format(R"(SELECT MAX(id) FROM {})", Table_Name)) };
-    return response[0][0].as<std::int64_t>();
+    auto response{ Exec_Query(std::format(R"(SELECT MIN(id) AS min_val, MAX(id) AS max_val FROM {})", Table_Name)) };
+    return { response[0]["min_val"].as<std::int64_t>(), response[0]["max_val"].as<std::int64_t>() };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+SMetrics AMetrics_DB_Controller::Get_Best_Metrics()
+{
+    auto response{ Exec_Query(std::format(R"(SELECT start_req, profile_req, pr_game_req, math_game_req, help_req, about_project_req, definition_req, date FROM {} WHERE total_number_of_requests = (SELECT MAX(total_number_of_requests) FROM {}))", Table_Name, Table_Name)) };
+    return SMetrics{ response[0][0].as<std::int64_t>(), response[0][1].as<std::int64_t>(), response[0][2].as<std::int64_t>(), response[0][3].as<std::int64_t>(), response[0][4].as<std::int64_t>(), response[0][5].as<std::int64_t>(), response[0][6].as<std::int64_t>(), response[0][7].as<std::string>() };
 }
