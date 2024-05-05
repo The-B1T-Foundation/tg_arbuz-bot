@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include <controller/db/base_db/base_db_controller.hpp>
 #include <model/metrics/metrics_model.hpp>
 
@@ -34,5 +36,8 @@ public:
 
     void Set_Metrics(const SMetrics& metrics);
     SMetrics Get_Metrics(std::int64_t metrics_id);
-    std::int64_t Get_Available_Metrics_Count();
+
+    // return min id and max id
+    std::pair<std::int64_t, std::int64_t> Get_Metrics_Range();
+    SMetrics Get_Best_Metrics();
 };

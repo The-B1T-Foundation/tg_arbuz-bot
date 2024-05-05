@@ -47,6 +47,12 @@ const std::string& SMetrics::Get_Current_Date() const
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+std::int64_t SMetrics::Get_Total_Number_Of_Requests() const
+{
+    return Start_Request_Count + Profile_Request_Count + Pr_Game_Request_Count + Math_Game_Request_Count +  Help_Request_Count + About_Project_Request_Count + Definition_Request_Count;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 void SMetrics::Clear()
 {
     Start_Request_Count = 0;

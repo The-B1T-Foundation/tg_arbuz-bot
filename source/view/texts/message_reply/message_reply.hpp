@@ -26,6 +26,7 @@
 #include <string>
 #include <cstdint>
 #include <format>
+#include <utility>
 
 #include <emoji.hpp>
 
@@ -51,7 +52,7 @@ public:
     static std::string Get_Info_About_Project_Msg();
     static std::string Get_Word_Definition_Msg(std::string_view primary_word, std::string_view definiton);
     static std::string Get_Not_Found_Word_Definition_Msg();
-    static std::string Get_Metrics_Count_Msg(std::int64_t metrics_count);
+    static std::string Get_Metrics_Range_Msg(const std::pair<std::int64_t, std::int64_t>& metrics_range);
     static std::string Get_Metrics_Msg(const SMetrics& metrics);
     static std::string Get_Limit_Api_Requests_Msg();
 };
