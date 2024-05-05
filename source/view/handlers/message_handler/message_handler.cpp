@@ -125,23 +125,38 @@ void AMessage_Handler::Bind_Commands()
 
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition_Msg());
     });
-    TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Count.data(), [this](TgBot::Message::Ptr message) -> void
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Range.data(), [this](TgBot::Message::Ptr message) -> void
     {
         if (!Is_Root_User(message->from->id))
         {
             return;
         }
 
-        auto metrics_count{ Metrics_DB_Controller.Get_Available_Metrics_Count() };
-        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Count_Msg(metrics_count));
+        auto metrics_range{ Metrics_DB_Controller.Get_Metrics_Range() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Range_Msg(metrics_range));
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Metrics.data(), [this](TgBot::Message::Ptr message) -> void
     {
+        if (!Is_Root_User(message->from->id))
+        {
+            return;
+        }
+
         Cut_User_Input(message->text, SMessage_Commands::Get_Metrics.size());
         std::int64_t metrics_id{ strtoll(message->text.c_str(), nullptr, 10) };
 
         auto metrics{ Metrics_DB_Controller.Get_Metrics(metrics_id) };
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Msg(metrics));
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Best_Metric.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (!Is_Root_User(message->from->id))
+        {
+            return;
+        }
+
+        auto best_metric{ Metrics_DB_Controller.Get_Best_Metrics() };
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Metrics_Msg(best_metric));
     });
 }
 
