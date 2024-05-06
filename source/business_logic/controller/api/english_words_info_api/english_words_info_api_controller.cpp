@@ -43,10 +43,70 @@ AEnglish_Words_Info_API_Controller::~AEnglish_Words_Info_API_Controller()
 // ---------------------------------------------------------------------------------------------------------------------
 std::optional<std::string> AEnglish_Words_Info_API_Controller::Get_Definition(const std::string& word)
 {
+    if (!Send_Request(word, "/definitions", "GET"))
+    {
+        return std::nullopt;
+    }
+
+    std::string response{};
+    response.reserve(500);
+
+    for (std::size_t i{}; i < Max_Response_Depth && !Json_Response["definitions"][i].empty(); ++i)
+    {
+        response += Json_Response["definitions"][i]["definition"];
+        response += "\n\n";
+    }
+
+    return response;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<std::string> AEnglish_Words_Info_API_Controller::Get_Antonym(const std::string& word)
+{
+    if (!Send_Request(word, "/antonyms", "GET"))
+    {
+        return std::nullopt;
+    }
+
+    std::string response{};
+    response.reserve(500);
+
+    for (std::size_t i{}; i < Max_Response_Depth && !Json_Response["antonyms"][i].empty(); ++i)
+    {
+        response += Json_Response["antonyms"][i];
+        response += "\n";
+    }
+
+    return response;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::optional<std::string> AEnglish_Words_Info_API_Controller::Get_Synonym(const std::string& word)
+{
+    if (!Send_Request(word, "/synonyms", "GET"))
+    {
+        return std::nullopt;
+    }
+
+    std::string response{};
+    response.reserve(500);
+
+    for (std::size_t i{}; i < Max_Response_Depth && !Json_Response["synonyms"][i].empty(); ++i)
+    {
+        response += Json_Response["synonyms"][i];
+        response += "\n";
+    }
+
+    return response;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+bool AEnglish_Words_Info_API_Controller::Send_Request(std::string_view word, std::string_view endpoint, std::string_view request_type)
+{
     if (Curl = curl_easy_init(); Curl != nullptr)
     {
-        curl_easy_setopt(Curl, CURLOPT_URL, (Url + word).data());
-        curl_easy_setopt(Curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_easy_setopt(Curl, CURLOPT_URL, (Url + word.data() + endpoint.data()).data());
+        curl_easy_setopt(Curl, CURLOPT_CUSTOMREQUEST, request_type.data());
         curl_easy_setopt(Curl, CURLOPT_HTTPHEADER, Headers);
         curl_easy_setopt(Curl, CURLOPT_WRITEFUNCTION, &ABase_API_Controller::Write_Callback);
         curl_easy_setopt(Curl, CURLOPT_WRITEDATA, &AEnglish_Words_Info_API_Controller::Json_Response);
@@ -58,11 +118,11 @@ std::optional<std::string> AEnglish_Words_Info_API_Controller::Get_Definition(co
 
         curl_easy_cleanup(Curl);
 
-        if (resp_code != EHTTP_STATUS::OK || Json_Response["results"][0]["definition"].empty())
+        if (resp_code != EHTTP_STATUS::OK)
         {
-            return std::nullopt;
+            return false;
         }
     }
 
-    return Json_Response["results"][0]["definition"];
+    return Curl != nullptr;
 }

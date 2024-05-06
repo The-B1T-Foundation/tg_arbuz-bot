@@ -36,8 +36,14 @@ public:
     ~AEnglish_Words_Info_API_Controller() override;
 
     std::optional<std::string> Get_Definition(const std::string& word);
+    std::optional<std::string> Get_Antonym(const std::string& word);
+    std::optional<std::string> Get_Synonym(const std::string& word);
 
 private:
+    bool Send_Request(std::string_view word, std::string_view endpoint, std::string_view request_type);
+
+private:
+    constexpr static std::size_t Max_Response_Depth{ 10 };
     static nljson Json_Response;
     curl_slist* Headers;
 };
