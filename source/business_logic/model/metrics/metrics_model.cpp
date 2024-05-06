@@ -25,12 +25,12 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 SMetrics::SMetrics() :
-    Start_Request_Count{}, Profile_Request_Count{}, Pr_Game_Request_Count{}, Math_Game_Request_Count{}, Help_Request_Count{}, About_Project_Request_Count{}, Definition_Request_Count{}, Current_Date{}
+    Start_Request_Count{}, Profile_Request_Count{}, Pr_Game_Request_Count{}, Math_Game_Request_Count{}, Help_Request_Count{}, About_Project_Request_Count{}, Definition_Request_Count{}, Antonym_Request_Count{}, Synonym_Request_Count{}, Current_Date{}
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
-SMetrics::SMetrics(std::int64_t start_request_count, std::int64_t profile_request_count, std::int64_t pr_game_request_count, std::int64_t math_game_request_count, std::int64_t help_request_count, std::int64_t about_project_request_count, std::int64_t definition_request_count, std::string current_date) :
-    Start_Request_Count{ start_request_count }, Profile_Request_Count{ profile_request_count }, Pr_Game_Request_Count{ pr_game_request_count }, Math_Game_Request_Count{ math_game_request_count }, Help_Request_Count{ help_request_count }, About_Project_Request_Count{ about_project_request_count }, Definition_Request_Count{ definition_request_count }, Current_Date{ std::move(current_date) }
+SMetrics::SMetrics(std::int64_t start_request_count, std::int64_t profile_request_count, std::int64_t pr_game_request_count, std::int64_t math_game_request_count, std::int64_t help_request_count, std::int64_t about_project_request_count, std::int64_t definition_request_count, std::int64_t antonym_request_count, std::int64_t synonym_request_count, std::string current_date) :
+    Start_Request_Count{ start_request_count }, Profile_Request_Count{ profile_request_count }, Pr_Game_Request_Count{ pr_game_request_count }, Math_Game_Request_Count{ math_game_request_count }, Help_Request_Count{ help_request_count }, About_Project_Request_Count{ about_project_request_count }, Definition_Request_Count{ definition_request_count }, Antonym_Request_Count{ antonym_request_count }, Synonym_Request_Count{ synonym_request_count }, Current_Date{ std::move(current_date) }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ const std::string& SMetrics::Get_Current_Date() const
 // ---------------------------------------------------------------------------------------------------------------------
 std::int64_t SMetrics::Get_Total_Number_Of_Requests() const
 {
-    return Start_Request_Count + Profile_Request_Count + Pr_Game_Request_Count + Math_Game_Request_Count +  Help_Request_Count + About_Project_Request_Count + Definition_Request_Count;
+    return Start_Request_Count + Profile_Request_Count + Pr_Game_Request_Count + Math_Game_Request_Count +  Help_Request_Count + About_Project_Request_Count + Definition_Request_Count + Antonym_Request_Count + Synonym_Request_Count;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -62,5 +62,7 @@ void SMetrics::Clear()
     Help_Request_Count = 0;
     About_Project_Request_Count = 0;
     Definition_Request_Count = 0;
+    Antonym_Request_Count = 0;
+    Synonym_Request_Count = 0;
     Current_Date = " ";
 }

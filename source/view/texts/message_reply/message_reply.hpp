@@ -55,4 +55,8 @@ public:
     static std::string Get_Metrics_Range_Msg(const std::pair<std::int64_t, std::int64_t>& metrics_range);
     static std::string Get_Metrics_Msg(const SMetrics& metrics);
     static std::string Get_Limit_Api_Requests_Msg();
+    static std::string Get_Antonym_Msg(std::string_view primary_word, std::string_view antonym);
+    static std::string Get_Not_Found_Antonym_Msg();
+    static std::string Get_Synonym_Msg(std::string_view primary_word, std::string_view synonym);
+    static std::string Get_Not_Found_Synonym_Msg();
 };

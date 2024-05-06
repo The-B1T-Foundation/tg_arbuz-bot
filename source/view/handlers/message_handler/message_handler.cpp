@@ -125,6 +125,48 @@ void AMessage_Handler::Bind_Commands()
 
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Word_Definition_Msg());
     });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Antonym.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (!Words_Api_Requests_Limiter.Can_Send_Request())
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Limit_Api_Requests_Msg());
+            return;
+        }
+
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Antonym_Request_Count;
+
+        Cut_User_Input(message->text, SMessage_Commands::Get_Antonym.size());
+        if (auto response{ English_Words_API_Controller.Get_Antonym(message->text) }; response != std::nullopt)
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id,
+                                        AMessage_Reply::Get_Antonym_Msg(message->text, response.value()));
+            return;
+        }
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Antonym_Msg());
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Synonym.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (!Words_Api_Requests_Limiter.Can_Send_Request())
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Limit_Api_Requests_Msg());
+            return;
+        }
+
+        std::lock_guard<std::mutex> locker(Mutex);
+        ++Metrics.Synonym_Request_Count;
+
+        Cut_User_Input(message->text, SMessage_Commands::Get_Synonym.size());
+        if (auto response{ English_Words_API_Controller.Get_Synonym(message->text) }; response != std::nullopt)
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id,
+                                        AMessage_Reply::Get_Synonym_Msg(message->text, response.value()));
+            return;
+        }
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Synonym_Msg());
+    });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Range.data(), [this](TgBot::Message::Ptr message) -> void
     {
         if (!Is_Root_User(message->from->id))
