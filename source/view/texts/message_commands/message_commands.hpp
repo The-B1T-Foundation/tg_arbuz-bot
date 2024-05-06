@@ -38,4 +38,6 @@ struct SMessage_Commands
     constinit static std::string_view Metrics_Range;
     constinit static std::string_view Get_Metrics;
     constinit static std::string_view Get_Best_Metric;
+    constinit static std::string_view Get_Antonym;
+    constinit static std::string_view Get_Synonym;
 };

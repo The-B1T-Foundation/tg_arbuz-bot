@@ -34,3 +34,5 @@ constinit std::string_view SMessage_Commands::Definiton{ "def" };
 constinit std::string_view SMessage_Commands::Metrics_Range{"metrics_range" };
 constinit std::string_view SMessage_Commands::Get_Metrics{ "get_metrics" };
 constinit std::string_view SMessage_Commands::Get_Best_Metric{ "get_best_metric" };
+constinit std::string_view SMessage_Commands::Get_Antonym{ "ant" };
+constinit std::string_view SMessage_Commands::Get_Synonym{ "syn" };

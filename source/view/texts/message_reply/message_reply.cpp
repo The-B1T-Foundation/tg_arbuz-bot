@@ -80,13 +80,13 @@ std::string AMessage_Reply::Get_Info_About_Project_Msg()
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Word_Definition_Msg(std::string_view primary_word, std::string_view definiton)
 {
-    return std::format("Визначення слова {}:\n{} - {}", primary_word, primary_word, definiton);
+    return std::format("Визначення слова {}:\n\n{}", primary_word, definiton);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Not_Found_Word_Definition_Msg()
 {
-    return std::format("Скоріш за все ти ввів дивне слово, я не можу знайти визначення для нього)");
+    return std::string{ "Скоріш за все ти ввів дивне слово, я не можу знайти визначення для нього)" };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -105,4 +105,28 @@ std::string AMessage_Reply::Get_Metrics_Msg(const SMetrics& metrics)
 std::string AMessage_Reply::Get_Limit_Api_Requests_Msg()
 {
     return std::string{ "Нажаль ліміт запросів перевищено!\nСпробуйте пізніше)" };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Antonym_Msg(std::string_view primary_word, std::string_view antonym)
+{
+    return std::format("Антоніми до слова {}:\n\n{}", primary_word, antonym);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Not_Found_Antonym_Msg()
+{
+    return std::string{ "Мені не вдалося знайти антонім до твого слова) " };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Synonym_Msg(std::string_view primary_word, std::string_view synonym)
+{
+    return std::format("Синонім до слова {}:\n\n{}", primary_word, synonym);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Not_Found_Synonym_Msg()
+{
+    return std::string{ "Мені не вдалося знайти синонім до твого слова) " };
 }
