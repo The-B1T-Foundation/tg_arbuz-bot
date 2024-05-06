@@ -38,13 +38,13 @@ std::string AMessage_Reply::Get_Profile_Msg(const AUser& user, std::int64_t scor
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Programmer_Game_Msg(const programmer_game::SExpression& expression)
 {
-    return std::format("Головний Арбуз вигенерував для тебе задачку з бінарним кодом:\n\n1-число:\t{}\n2-число:\t{}\nОперація яку слід примінити: {}\n\nВідповідь напиши за допомогою /answer (тут пробіл) відповідь", expression.First_Operand, expression.Second_Operand, expression.Operation);
+    return std::format("Головний Арбуз вигенерував для тебе задачку з бінарним кодом:\n\n1-число:\t{}\n2-число:\t{}\nОперація яку слід примінити: {}\n\nВідповідь напиши за допомогою /ans (тут пробіл) відповідь", expression.First_Operand, expression.Second_Operand, expression.Operation);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Math_Game_Msg(const math_game::SMath_Expression& expression)
 {
-    return std::format("Головний Арбуз вигенерував для тебе математичну задачку:\n{}\n\nВідповідь напиши за допомогою /answer (тут пробіл) відповідь", expression.Expression);
+    return std::format("Головний Арбуз вигенерував для тебе математичну задачку:\n{}\n\nВідповідь напиши за допомогою /ans (тут пробіл) відповідь", expression.Expression);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ std::string AMessage_Reply::Get_Incorrect_Answer_Msg(std::int64_t score, std::st
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Help_Msg()
 {
-    return std::format("Привіт Арбуз, це блок з поясненням деяких ігрових механік {}\n\n1) Як відповідати на задачі ?\nВсе дуже просто пишеш команду /answer і через пробіл відповідь, наприклад: /answer 25\n\n2) Як вирішити гру pr_game, погугли про оператори &(AND) |(OR)\n\nЯкщо в тебе виникли проблеми, пиши власнику бота на пошту theb1tfoundation.gh@gmail.com", DETAIL);
+    return std::format("Привіт Арбуз, це блок з поясненням деяких ігрових механік {}\n\n1) Як відповідати на задачі ?\nВсе дуже просто пишеш команду /ans і через пробіл відповідь, наприклад: /ans 25\n\n2) Як вирішити гру pr_game, погугли про оператори &(AND) |(OR)\n\nЯкщо в тебе виникли проблеми, пиши власнику бота на пошту theb1tfoundation.gh@gmail.com", DETAIL);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ std::string AMessage_Reply::Get_Metrics_Range_Msg(const std::pair<std::int64_t, 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Metrics_Msg(const SMetrics& metrics)
 {
-    return std::format("Метрики Arbuz-Bot\n\nДата: {}\n\nЗагальна кількість реквестів: {}\n\nКількість реквестів на команди:\nStart: {}\nProfile: {}\nProgrammer Game: {}\nMath Game: {}\nHelp: {}\nAbout Project: {}\nDefinition: {}", metrics.Get_Current_Date(), metrics.Get_Total_Number_Of_Requests(), metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count);
+    return std::format("Метрики Arbuz-Bot\n\nДата: {}\n\nЗагальна кількість реквестів: {}\n\nКількість реквестів на команди:\nStart: {}\nProfile: {}\nProgrammer Game: {}\nMath Game: {}\nHelp: {}\nAbout Project: {}\nDefinition: {}\nSynonym: {}\nAntonym: {}", metrics.Get_Current_Date(), metrics.Get_Total_Number_Of_Requests(), metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count, metrics.Synonym_Request_Count, metrics.Antonym_Request_Count);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
