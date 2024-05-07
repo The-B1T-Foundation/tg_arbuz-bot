@@ -98,7 +98,7 @@ std::string AMessage_Reply::Get_Metrics_Range_Msg(const std::pair<std::int64_t, 
 // ---------------------------------------------------------------------------------------------------------------------
 std::string AMessage_Reply::Get_Metrics_Msg(const SMetrics& metrics)
 {
-    return std::format("Метрики Arbuz-Bot\n\nДата: {}\n\nЗагальна кількість реквестів: {}\n\nКількість реквестів на команди:\nStart: {}\nProfile: {}\nProgrammer Game: {}\nMath Game: {}\nHelp: {}\nAbout Project: {}\nDefinition: {}\nSynonym: {}\nAntonym: {}", metrics.Get_Current_Date(), metrics.Get_Total_Number_Of_Requests(), metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count, metrics.Synonym_Request_Count, metrics.Antonym_Request_Count);
+    return std::format("Метрики Arbuz-Bot\n\nДата: {}\n\nЗагальна кількість реквестів: {}\n\nКількість реквестів на команди:\nStart: {}\nProfile: {}\nProgrammer Game: {}\nMath Game: {}\nHelp: {}\nAbout Project: {}\nDefinition: {}\nSynonym: {}\nAntonym: {}\nMeme: {}", metrics.Get_Current_Date(), metrics.Get_Total_Number_Of_Requests(), metrics.Start_Request_Count, metrics.Profile_Request_Count, metrics.Pr_Game_Request_Count, metrics.Math_Game_Request_Count, metrics.Help_Request_Count, metrics.About_Project_Request_Count, metrics.Definition_Request_Count, metrics.Synonym_Request_Count, metrics.Antonym_Request_Count, metrics.Meme_Request_Count);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
