@@ -37,6 +37,7 @@
 #include <controller/api/english_words_info_api/english_words_info_api_controller.hpp>
 #include <controller/programmer_game/programmer_game_controller.hpp>
 #include <controller/math_problem_game/math_problem_game_controller.hpp>
+#include <controller/api/meme_api/meme_api_controller.hpp>
 
 #include <api_requests_limiter/api_requests_limiter.hpp>
 
@@ -50,7 +51,7 @@
 class AMessage_Handler
 {
 public:
-    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg);
+    explicit AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AMeme_API_Controller& meme_api_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg);
     constexpr ~AMessage_Handler() = default;
 
     void Bind_Commands();
@@ -80,5 +81,7 @@ private:
     AStats_DB_Controller& Stats_DB_Controller;
     AMetrics_DB_Controller& Metrics_DB_Controller;
     AEnglish_Words_Info_API_Controller& English_Words_API_Controller;
+    AMeme_API_Controller& Meme_API_Controller;
     AApi_Requests_Limiter Words_Api_Requests_Limiter;
+    AApi_Requests_Limiter Meme_Api_Requests_Limiter;
 };

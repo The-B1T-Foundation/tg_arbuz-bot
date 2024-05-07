@@ -36,3 +36,4 @@ constinit std::string_view SMessage_Commands::Get_Metrics{ "get_metrics" };
 constinit std::string_view SMessage_Commands::Get_Best_Metric{ "get_best_metric" };
 constinit std::string_view SMessage_Commands::Get_Antonym{ "ant" };
 constinit std::string_view SMessage_Commands::Get_Synonym{ "syn" };
+constinit std::string_view SMessage_Commands::Get_Meme{ "meme" };
