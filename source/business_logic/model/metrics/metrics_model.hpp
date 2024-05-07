@@ -32,7 +32,7 @@ struct SMetrics
 {
 public:
     explicit SMetrics();
-    [[maybe_unused]] explicit SMetrics(std::int64_t start_request_count, std::int64_t profile_request_count, std::int64_t pr_game_request_count, std::int64_t math_game_request_count, std::int64_t help_request_count, std::int64_t about_project_request_count, std::int64_t definition_request_count, std::int64_t antonym_request_count, std::int64_t synonym_request_count, std::string current_date);
+    [[maybe_unused]] explicit SMetrics(std::int64_t start_request_count, std::int64_t profile_request_count, std::int64_t pr_game_request_count, std::int64_t math_game_request_count, std::int64_t help_request_count, std::int64_t about_project_request_count, std::int64_t definition_request_count, std::int64_t antonym_request_count, std::int64_t synonym_request_count, std::int64_t meme_request_count, std::string current_date);
 
     ~SMetrics() = default;
 
@@ -42,7 +42,6 @@ public:
     [[nodiscard]] std::int64_t Get_Total_Number_Of_Requests() const;
     void Clear();
 
-    // antonym - synonym
 public:
     std::int64_t Start_Request_Count;
     std::int64_t Profile_Request_Count;
@@ -53,6 +52,7 @@ public:
     std::int64_t Definition_Request_Count;
     std::int64_t Antonym_Request_Count;
     std::int64_t Synonym_Request_Count;
+    std::int64_t Meme_Request_Count;
 
 private:
     std::string Current_Date;
