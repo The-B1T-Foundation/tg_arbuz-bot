@@ -34,6 +34,7 @@ set(MODEL_HEADERS
         model/config/english_words_info_api_config/english_words_info_api_config_model.hpp
         model/metrics/metrics_model.hpp
         model/config/tg_root_user_config/tg_root_user_config_model.hpp
+        model/config/meme_api_config/meme_api_config_model.hpp
 )
 
 set(MODEL_SOURCES
@@ -45,6 +46,7 @@ set(MODEL_SOURCES
         model/config/english_words_info_api_config/english_words_info_api_config_model.cpp
         model/metrics/metrics_model.cpp
         model/config/tg_root_user_config/tg_root_user_config_model.cpp
+        model/config/meme_api_config/meme_api_config_model.cpp
 )
 
 set(CONTROLLER_HEADERS
@@ -62,6 +64,8 @@ set(CONTROLLER_HEADERS
         controller/config/english_words_info_api_config/english_words_info_api_config_controller.hpp
         controller/db/metrics_db/metrics_db_controller.hpp
         controller/config/tg_root_user_config/tg_root_user_config_controller.hpp
+        controller/api/meme_api/meme_api_controller.hpp
+        controller/config/meme_api_config/meme_api_config_controller.hpp
 )
 
 set(CONTROLLER_SOURCES
@@ -79,6 +83,8 @@ set(CONTROLLER_SOURCES
         controller/config/english_words_info_api_config/english_words_info_api_config_controller.cpp
         controller/db/metrics_db/metrics_db_controller.cpp
         controller/config/tg_root_user_config/tg_root_user_config_controller.cpp
+        controller/api/meme_api/meme_api_controller.cpp
+        controller/config/meme_api_config/meme_api_config_controller.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC
