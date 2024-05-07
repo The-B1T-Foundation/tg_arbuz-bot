@@ -29,7 +29,7 @@ class AEnglish_Words_Info_API_Config
 {
 public:
     explicit AEnglish_Words_Info_API_Config(std::string_view api_key, std::string_view api_host);
-    ~AEnglish_Words_Info_API_Config() = default;
+    constexpr ~AEnglish_Words_Info_API_Config() = default;
 
     [[nodiscard]] std::string_view Get_API_Key() const;
     [[nodiscard]] std::string_view Get_API_Host() const;
