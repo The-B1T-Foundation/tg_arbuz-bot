@@ -23,22 +23,15 @@
 
 #pragma once
 
-#include <string>
+#include <optional>
 
-struct SMessage_Commands
+#include <model/config/meme_api_config/meme_api_config_model.hpp>
+
+class AMeme_API_Config_Controller
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Range;
-    constinit static std::string_view Get_Metrics;
-    constinit static std::string_view Get_Best_Metric;
-    constinit static std::string_view Get_Antonym;
-    constinit static std::string_view Get_Synonym;
-    constinit static std::string_view Get_Meme;
+public:
+    constexpr AMeme_API_Config_Controller() = default;
+    constexpr ~AMeme_API_Config_Controller() = default;
+
+    static std::optional<AMeme_API_Config> Load_Config();
 };

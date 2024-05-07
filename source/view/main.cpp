@@ -28,6 +28,8 @@
 #include <controller/config/english_words_info_api_config/english_words_info_api_config_controller.hpp>
 #include <controller/db/metrics_db/metrics_db_controller.hpp>
 #include <controller/config/tg_root_user_config/tg_root_user_config_controller.hpp>
+#include <controller/config/meme_api_config/meme_api_config_controller.hpp>
+#include <controller/api/meme_api/meme_api_controller.hpp>
 
 #include <message_handler.hpp>
 
@@ -49,7 +51,7 @@ int main()
         return -1;
     }
 
-    auto english_words_info_api_cfg{AEnglish_Words_Info_API_Config_Controller::Load_Config() };
+    auto english_words_info_api_cfg{ AEnglish_Words_Info_API_Config_Controller::Load_Config() };
     if (english_words_info_api_cfg == std::nullopt)
     {
         ALogger_Utility::Error("Error reading english words api config data");
@@ -62,6 +64,13 @@ int main()
         ALogger_Utility::Error("Error reading tg root user cfg data");
         return -1;
     }
+
+    auto meme_api_cfg{ AMeme_API_Config_Controller::Load_Config() };
+    if (meme_api_cfg == std::nullopt)
+    {
+        ALogger_Utility::Error("Error reading meme api cfg data");
+        return -1;
+    }
 #endif
 
     TgBot::Bot tg_bot{ tg_cfg->Get_TG_Token().data() };
@@ -72,8 +81,9 @@ int main()
     AStats_DB_Controller stats_db_controller{ *db_cfg };
     AMetrics_DB_Controller metrics_db_controller{ *db_cfg };
     AEnglish_Words_Info_API_Controller english_words_api_controller{ *english_words_info_api_cfg };
+    AMeme_API_Controller meme_api_controller{ *meme_api_cfg };
 
-    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller, english_words_api_controller, metrics_db_controller, *tg_root_user_cfg };
+    AMessage_Handler message_handler{ tg_bot, user_db_controller, state_db_controller, task_db_controller, stats_db_controller, meme_api_controller, english_words_api_controller, metrics_db_controller, *tg_root_user_cfg };
     message_handler.Bind_Commands();
 
     std::thread metrics_thread([&message_handler]() -> void

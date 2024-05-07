@@ -27,8 +27,8 @@
 std::mutex AMessage_Handler::Mutex{ };
 
 // ---------------------------------------------------------------------------------------------------------------------
-AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg) :
-    TG_Bot{ tg_bot }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller }, English_Words_API_Controller{ english_words_api_controller }, Metrics_DB_Controller{ metrics_db_controller }, TG_Root_User_Cfg{ tg_root_user_cfg }, Words_Api_Requests_Limiter{ 2500, 24 }
+AMessage_Handler::AMessage_Handler(TgBot::Bot& tg_bot, AUser_DB_Controller& user_db_controller, AState_DB_Controller& state_db_controller, ATask_DB_Controller& task_db_controller, AStats_DB_Controller& stats_db_controller, AMeme_API_Controller& meme_api_controller, AEnglish_Words_Info_API_Controller& english_words_api_controller, AMetrics_DB_Controller& metrics_db_controller, ATG_Root_User_Config& tg_root_user_cfg) :
+    TG_Bot{ tg_bot }, TG_Root_User_Cfg{ tg_root_user_cfg }, User_DB_Controller{ user_db_controller }, State_DB_Controller{ state_db_controller }, Task_DB_Controller{ task_db_controller }, Stats_DB_Controller{ stats_db_controller },Metrics_DB_Controller{ metrics_db_controller }, English_Words_API_Controller{ english_words_api_controller }, Meme_API_Controller{ meme_api_controller }, Words_Api_Requests_Limiter{ 2500, 24 }, Meme_Api_Requests_Limiter{ 150, 24 }
 { }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -166,6 +166,16 @@ void AMessage_Handler::Bind_Commands()
         }
 
         TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Not_Found_Synonym_Msg());
+    });
+    TG_Bot.getEvents().onCommand(SMessage_Commands::Get_Meme.data(), [this](TgBot::Message::Ptr message) -> void
+    {
+        if (!Meme_Api_Requests_Limiter.Can_Send_Request())
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Limit_Api_Requests_Msg());
+            return;
+        }
+
+        TG_Bot.getApi().sendMessage(message->chat->id, Meme_API_Controller.Get_Meme());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Range.data(), [this](TgBot::Message::Ptr message) -> void
     {

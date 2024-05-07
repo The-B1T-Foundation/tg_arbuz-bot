@@ -21,24 +21,21 @@
 // SOFTWARE.
 
 
-#pragma once
+#include "meme_api_config_model.hpp"
 
-#include <string>
+// ---------------------------------------------------------------------------------------------------------------------
+AMeme_API_Config::AMeme_API_Config(std::string_view api_key, std::string_view api_host) :
+    API_Key{ api_key }, API_Host{ api_host }
+{ }
 
-struct SMessage_Commands
+// ---------------------------------------------------------------------------------------------------------------------
+std::string_view AMeme_API_Config::Get_API_Key() const
 {
-    constinit static std::string_view Start;
-    constinit static std::string_view Profile;
-    constinit static std::string_view Programmer_Game;
-    constinit static std::string_view Math_Game;
-    constinit static std::string_view Answer;
-    constinit static std::string_view Help;
-    constinit static std::string_view About_Project;
-    constinit static std::string_view Definiton;
-    constinit static std::string_view Metrics_Range;
-    constinit static std::string_view Get_Metrics;
-    constinit static std::string_view Get_Best_Metric;
-    constinit static std::string_view Get_Antonym;
-    constinit static std::string_view Get_Synonym;
-    constinit static std::string_view Get_Meme;
-};
+    return API_Key;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string_view AMeme_API_Config::Get_API_Host() const
+{
+    return API_Host;
+}
