@@ -178,7 +178,13 @@ void AMessage_Handler::Bind_Commands()
         std::lock_guard<std::mutex> locker(Mutex);
         ++Metrics.Meme_Request_Count;
 
-        TG_Bot.getApi().sendMessage(message->chat->id, Meme_API_Controller.Get_Meme());
+        if (auto meme{ Meme_API_Controller.Get_Meme() }; meme != std::nullopt)
+        {
+            TG_Bot.getApi().sendMessage(message->chat->id, meme.value());
+            return;
+        }
+
+        TG_Bot.getApi().sendMessage(message->chat->id, AMessage_Reply::Get_Server_Internal_Error());
     });
     TG_Bot.getEvents().onCommand(SMessage_Commands::Metrics_Range.data(), [this](TgBot::Message::Ptr message) -> void
     {

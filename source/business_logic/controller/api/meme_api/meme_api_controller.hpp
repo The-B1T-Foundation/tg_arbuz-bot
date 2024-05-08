@@ -27,6 +27,7 @@
 #include <stack>
 #include <vector>
 #include <string>
+#include <optional>
 
 #include <controller/api/base_api/base_api_controller.hpp>
 
@@ -38,7 +39,7 @@ public:
     explicit AMeme_API_Controller(const AMeme_API_Config& meme_api_config);
     ~AMeme_API_Controller() override;
 
-    std::string Get_Meme();
+    std::optional<std::string> Get_Meme();
 
 private:
     bool Send_Request(std::string_view request_type);
