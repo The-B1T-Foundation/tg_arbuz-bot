@@ -59,4 +59,5 @@ public:
     static std::string Get_Not_Found_Antonym_Msg();
     static std::string Get_Synonym_Msg(std::string_view primary_word, std::string_view synonym);
     static std::string Get_Not_Found_Synonym_Msg();
+    static std::string Get_Server_Internal_Error();
 };

@@ -130,3 +130,9 @@ std::string AMessage_Reply::Get_Not_Found_Synonym_Msg()
 {
     return std::string{ "Мені не вдалося знайти синонім до твого слова) " };
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+std::string AMessage_Reply::Get_Server_Internal_Error()
+{
+    return std::string{ "Сталася помилка на стороні сервера!" };
+}
