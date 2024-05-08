@@ -41,11 +41,14 @@ AMeme_API_Controller::~AMeme_API_Controller()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-std::string AMeme_API_Controller::Get_Meme()
+std::optional<std::string> AMeme_API_Controller::Get_Meme()
 {
     if (Meme_Links_Stack.empty())
     {
-        Send_Request("GET");
+        if (!Send_Request("GET"))
+        {
+            return std::nullopt;
+        }
 
         for (std::size_t i{}; !Json_Response.empty() && i < 12; ++i) // 12 - default count of meme links
         {
